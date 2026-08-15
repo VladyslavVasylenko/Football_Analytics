@@ -3,30 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Футбольна Аналітика</title>
+    <title>Футбольний Психопат — Аналітика</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="header-top">
-            <h1 data-i18n="title">⚽ Футбольна Аналітика</h1>
-            <select id="lang-select" class="lang-select">
-                <option value="uk" selected>🇺🇦 UA</option>
-                <option value="en">🇬🇧 EN</option>
-                <option value="cs">🇨🇿 CZ</option>
-                <option value="ru">🇷🇺 RU</option>
-            </select>
-        </div>
-        <p data-i18n="subtitle">Тактичні профілі та детальна статистика гравців</p>
-    </header>
+    <div class="container">
+        <header class="main-header">
+            <div class="header-top">
+                <h1 data-i18n="title">⚽ Футбольний Психопат</h1>
+                <select id="lang-select" class="lang-select">
+                    <option value="uk" selected>🇺🇦 UA</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="cs">🇨🇿 CZ</option>
+                    <option value="ru">🇷🇺 RU</option>
+                </select>
+            </div>
+            <p data-i18n="subtitle">Тактичні профілі та детальна статистика гравців</p>
+        </header>
 
-    <main class="container">
-        <section class="players-section">
-            <h2 data-i18n="squad">Склад команди</h2>
-            <div id="players-list" class="players-grid"></div>
-        </section>
-    </main>
+        <main>
+            <!-- БЛОК ПОШУКУ КЛУБУ -->
+            <section class="search-section">
+                <h3 data-i18n="search_title">🔍 Вибір клубу для аналітики</h3>
+                <div class="search-form">
+                    <input type="text" id="club-input" placeholder="Назва клубу" value="Динамо Київ">
+                    <select id="country-select">
+                        <option value="ukraine" selected>🇺🇦 Україна</option>
+                        <option value="england">🇬🇧 Англія</option>
+                        <option value="spain">🇪🇸 Іспанія</option>
+                        <option value="czech">🇨🇿 Чехія</option>
+                        <option value="germany">🇩🇪 Німеччина</option>
+                    </select>
+                    <button id="search-btn" class="btn-primary" data-i18n="btn_search">Завантажити аналітику</button>
+                </div>
+            </section>
+
+            <!-- КАРТКА ПОТОЧНОГО КЛУБУ -->
+            <section class="club-card">
+                <h2 id="club-title">ФК Динамо Київ</h2>
+                <span id="club-country-badge" class="country-badge">🇺🇦 Україна</span>
+            </section>
+
+            <!-- СПИСОК ГРАВЦІВ -->
+            <section class="players-section">
+                <h2 data-i18n="squad">Склад команди</h2>
+                <div id="players-list" class="players-grid"></div>
+            </section>
+        </main>
+    </div>
 
     <!-- МОДАЛЬНЕ ВІКНО -->
     <div id="player-modal" class="modal hidden">
@@ -48,35 +73,30 @@
                 <div class="traits-block">
                     <h4 class="text-green" data-i18n="lbl_strengths">💪 Сильні сторони</h4>
                     <p id="modal-player-strengths">-</p>
-                    <h4 class="text-red" style="margin-top: 10px;" data-i18n="lbl_weaknesses">⚠️ Слабкі сторони</h4>
+                    <h4 class="text-red" style="margin-top: 8px;" data-i18n="lbl_weaknesses">⚠️ Слабкі сторони</h4>
                     <p id="modal-player-weaknesses">-</p>
                 </div>
 
-                <div class="tactical-analysis-block grid-col-full">
-                    <h4 class="text-yellow" style="margin-bottom: 8px;" data-i18n="lbl_tactics_title">📋 Тактична роль та зона ефективності</h4>
+                <div class="tactical-analysis-block">
+                    <h4 class="text-yellow" style="margin-bottom: 6px;" data-i18n="lbl_tactics_title">📋 Тактична роль та зона</h4>
                     <div class="tactical-details-card">
-                        <p><strong data-i18n="lbl_role">🎯 Найкраща роль:</strong> <span id="m-tac-role">-</span></p>
-                        <p><strong data-i18n="lbl_zone">📍 Оптимальна зона:</strong> <span id="m-tac-zone">-</span></p>
-                        <p><strong data-i18n="lbl_def">🛡️ Оборона / Пресинг:</strong> <span id="m-tac-def">-</span></p>
-                        <p><strong data-i18n="lbl_workrate">🏃‍♂️ Обсяг роботи:</strong> <span id="m-tac-workrate" class="highlight-text">-</span></p>
+                        <p><strong data-i18n="lbl_role">🎯 Роль:</strong> <span id="m-tac-role">-</span></p>
+                        <p><strong data-i18n="lbl_zone">📍 Зона:</strong> <span id="m-tac-zone">-</span></p>
+                        <p><strong data-i18n="lbl_def">🛡️ Пресинг:</strong> <span id="m-tac-def">-</span></p>
+                        <p><strong data-i18n="lbl_workrate">🏃‍♂️ Обсяг роботи:</strong> <span id="m-tac-workrate">-</span></p>
                     </div>
                 </div>
 
-                <div class="pitch-heatmap-block grid-col-full">
-                    <h4 class="text-yellow" style="margin-bottom: 10px;" data-i18n="lbl_heatmap">🔥 Зони активності на полі (Heatmap)</h4>
+                <div>
+                    <h4 class="text-yellow" style="margin-bottom: 6px;" data-i18n="lbl_heatmap">🔥 Зони активності (Heatmap)</h4>
                     <div class="pitch-container">
-                        <div class="pitch-markings">
-                            <div class="pitch-center-line"></div>
-                            <div class="pitch-center-circle"></div>
-                            <div class="pitch-box penalty-top"></div>
-                            <div class="pitch-box penalty-bottom"></div>
-                        </div>
+                        <div class="pitch-center-line"></div>
                         <div id="heatmap-grid" class="heatmap-grid"></div>
                     </div>
                 </div>
 
-                <div class="stats-block grid-col-full">
-                    <h4 class="text-green" style="margin-bottom: 10px;" data-i18n="lbl_stats">📈 Статистика дій</h4>
+                <div>
+                    <h4 class="text-green" style="margin-bottom: 6px;" data-i18n="lbl_stats">📈 Статистика</h4>
                     <div class="detailed-stats-grid">
                         <div class="stat-box"><span class="stat-val" id="m-goals">0</span><span class="stat-lbl" data-i18n="st_goals">Голи</span></div>
                         <div class="stat-box"><span class="stat-val" id="m-assists">0</span><span class="stat-lbl" data-i18n="st_assists">Асисти</span></div>
