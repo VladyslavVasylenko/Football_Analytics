@@ -1,5 +1,5 @@
 // ==========================================
-// 1. 55 КРАЇН УЄФА ТА ЇХНІ РЕАЛЬНІ КЛУБИ
+// 1. БАЗА ДАНИХ (55 КРАЇН УЄФА)
 // ==========================================
 const leagueData = {
     ENG: { name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Англія", league: "Прем'єр-Ліга", clubs: [
@@ -43,14 +43,21 @@ const leagueData = {
             { num: 1, name: "Віндаль", pos: "Воротар" }, { num: 4, name: "Зелени", pos: "Центральний захисник" },
             { num: 37, name: "Крейчі", pos: "Центральний захисник" }, { num: 25, name: "Вітік", pos: "Центральний захисник" },
             { num: 20, name: "Казабланка", pos: "Півзахисник" }, { num: 6, name: "Кайрінен", pos: "Півзахисник" },
-            { num: 18, name: "Саділек", pos: "Півзахисник" }, { num: 22, name: "Haraslín", pos: "Нападник" },
-            { num: 9, name: "Kuchta", pos: "Центрфорвард" }, { num: 14, name: "Birmančević", pos: "Нападник" },
-            { num: 10, name: "Karabec", pos: "Півзахисник" }
+            { num: 18, name: "Саділек", pos: "Півзахисник" }, { num: 22, name: "Гараслін", pos: "Нападник" },
+            { num: 9, name: "Кухта", pos: "Центрфорвард" }, { num: 14, name: "Бірманчевич", pos: "Нападник" },
+            { num: 10, name: "Карабец", pos: "Півзахисник" }
+        ]},
+        { id: "slavia", name: "Славія Прага", formation: "4-2-3-1", coach: "Йіндржих Трпишовський", players: [
+            { num: 1, name: "Коларж", pos: "Воротар" }, { num: 5, name: "Огбу", pos: "Центральний захисник" },
+            { num: 3, name: "Голеш", pos: "Центральний захисник" }, { num: 12, name: "Дудєра", pos: "Правий захисник" },
+            { num: 18, name: "Божіл", pos: "Лівий захисник" }, { num: 19, name: "Дорлі", pos: "Опорний півзахисник" },
+            { num: 10, name: "Зафеіріс", pos: "Центральний півзахисник" }, { num: 17, name: "Провід", pos: "Атакувальний півзахисник" },
+            { num: 21, name: "Дудєра", pos: "Правий вінгер" }, { num: 32, name: "Lingr", pos: "Лівий вінгер" },
+            { num: 13, name: "Хітіл", pos: "Центрфорвард" }
         ]}
-    ]
+    ]}
 };
 
-// Список решти 52 країн УЄФА
 const otherCountries = [
     { code: "ESP", name: "🇪🇸 Іспанія", league: "Ла Ліга" },
     { code: "ITA", name: "🇮🇹 Італія", league: "Серія А" },
@@ -106,7 +113,7 @@ const otherCountries = [
     { code: "RUS", name: "🇷🇺 Росія", league: "Прем'єр-ліга" }
 ];
 
-// Автозаповнення для країн без явного списку
+// Автогенерація для решти країн
 otherCountries.forEach(c => {
     const cleanName = c.name.split(" ")[1] || "Клуб";
     leagueData[c.code] = {
@@ -139,13 +146,16 @@ function generateAutoClub(id, name, code) {
 }
 
 // ==========================================
-// 2. ПОДІЇ ТА ВІДОБРАЖЕННЯ
+// 2. ІНІЦІАЛІЗАЦІЯ ТА ЛОГІКА ОЧИЩЕННЯ/ПЕРЕВІРКИ
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const countrySel = document.getElementById("country-select");
     const clubSel = document.getElementById("club-select");
 
-    countrySel.innerHTML = "";
+    if (!countrySel || !clubSel) return;
+
+    // Заповнюємо список країн + додаємо порожній дефолтний пункт
+    countrySel.innerHTML = '<option value="">-- Оберіть країну --</option>';
     Object.keys(leagueData).forEach(code => {
         const opt = document.createElement("option");
         opt.value = code;
@@ -153,71 +163,163 @@ document.addEventListener("DOMContentLoaded", () => {
         countrySel.appendChild(opt);
     });
 
-    countrySel.value = "ENG";
-    updateClubSelect("ENG");
+    // Очищаємо список клубів при старті
+    clubSel.innerHTML = '<option value="">-- Спочатку оберіть країну --</option>';
+    clearUI();
 
-    countrySel.addEventListener("change", (e) => updateClubSelect(e.target.value));
-    clubSel.addEventListener("change", (e) => loadClubData(countrySel.value, e.target.value));
-});
-
-function updateClubSelect(countryCode) {
-    const clubSel = document.getElementById("club-select");
-    clubSel.innerHTML = "";
-    
-    const country = leagueData[countryCode];
-    country.clubs.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.innerText = c.name;
-        clubSel.appendChild(opt);
+    // Подія зміни країни
+    countrySel.addEventListener("change", (e) => {
+        const countryCode = e.target.value;
+        updateClubSelect(countryCode);
     });
 
-    loadClubData(countryCode, country.clubs[0].id);
-}
+    // Подія зміни клубу
+    clubSel.addEventListener("change", (e) => {
+        const countryCode = countrySel.value;
+        const clubId = e.target.value;
+        loadClubData(countryCode, clubId);
+    });
+});
 
-function loadClubData(countryCode, clubId) {
-    const club = leagueData[countryCode].clubs.find(c => c.id === clubId);
-    if (!club) return;
+// Оновлення списку клубів для вибраної країни
+function updateClubSelect(countryCode) {
+    const clubSel = document.getElementById("club-select");
+    if (!clubSel) return;
 
-    document.getElementById("club-name").innerText = club.name;
-    document.getElementById("coach-name").innerText = club.coach;
-    document.getElementById("current-formation-title").innerText = club.formation;
+    clubSel.innerHTML = "";
 
-    // Оновлюємо список гравців
-    const list = document.getElementById("players-list");
-    if (list) {
-        list.innerHTML = "";
-        club.players.forEach(p => {
-            const item = document.createElement("div");
-            item.className = "player-item";
-            item.innerHTML = `<strong>#${p.num} ${p.name}</strong> — <span>${p.pos}</span>`;
-            list.appendChild(item);
+    // Перевірка: якщо країну не вибрано або код не існує
+    if (!countryCode || !leagueData[countryCode]) {
+        clubSel.innerHTML = '<option value="">-- Спочатку оберіть країну --</option>';
+        clearUI();
+        return;
+    }
+
+    const country = leagueData[countryCode];
+
+    // Додаємо дефолтну порожню опцію для клубів
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.innerText = "-- Оберіть клуб --";
+    clubSel.appendChild(defaultOpt);
+
+    if (country.clubs && country.clubs.length > 0) {
+        country.clubs.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c.id;
+            opt.innerText = c.name;
+            clubSel.appendChild(opt);
         });
     }
 
-    // Відображаємо на табло/полі
-    renderPitch("current-pitch-players", club.players, club.formation);
+    // Скидаємо інтерфейс у порожній стан, оскільки клуб ще не вибраний
+    clearUI();
 }
 
-function renderPitch(containerId, players, formation) {
+// Завантаження даних конкретного клубу
+function loadClubData(countryCode, clubId) {
+    // Перевірка 1: Чи вибрано країну
+    if (!countryCode || !leagueData[countryCode]) {
+        clearUI();
+        return;
+    }
+
+    // Перевірка 2: Чи вибрано клуб
+    if (!clubId) {
+        clearUI();
+        return;
+    }
+
+    const country = leagueData[countryCode];
+    const club = country.clubs ? country.clubs.find(c => c.id === clubId) : null;
+
+    // Перевірка 3: Чи належить даний клуб саме до вибраної країни
+    if (!club) {
+        clearUI();
+        return;
+    }
+
+    // Якщо всі перевірки пройдено — відображаємо дані
+    const elClubName = document.getElementById("club-name");
+    const elCoachName = document.getElementById("coach-name");
+    const elFormation = document.getElementById("current-formation-title");
+
+    if (elClubName) elClubName.innerText = club.name;
+    if (elCoachName) elCoachName.innerText = club.coach || "Не вказано";
+    if (elFormation) elFormation.innerText = club.formation || "-";
+
+    // Оновлення списку гравців
+    const list = document.getElementById("players-list");
+    if (list) {
+        list.innerHTML = "";
+        if (club.players && club.players.length > 0) {
+            club.players.forEach(p => {
+                const item = document.createElement("div");
+                item.className = "player-item";
+                item.style.padding = "6px 0";
+                item.style.borderBottom = "1px solid #eee";
+                item.innerHTML = `<strong>#${p.num} ${p.name}</strong> — <span style="color:#666">${p.pos}</span>`;
+                list.appendChild(item);
+            });
+        } else {
+            list.innerHTML = "<div>Немає інформації про гравців</div>";
+        }
+    }
+
+    // Відображення на полі
+    renderPitch("current-pitch-players", club.players || []);
+}
+
+// Повне очищення інтерфейсу (коли клуб не вибраний)
+function clearUI() {
+    const elClubName = document.getElementById("club-name");
+    const elCoachName = document.getElementById("coach-name");
+    const elFormation = document.getElementById("current-formation-title");
+    const list = document.getElementById("players-list");
+    const pitch = document.getElementById("current-pitch-players");
+
+    if (elClubName) elClubName.innerText = "Оберіть клуб";
+    if (elCoachName) elCoachName.innerText = "-";
+    if (elFormation) elFormation.innerText = "-";
+
+    if (list) {
+        list.innerHTML = '<div style="color:#888; font-style:italic;">Будь ласка, оберіть країну та клуб для перегляду складу.</div>';
+    }
+
+    if (pitch) {
+        pitch.innerHTML = "";
+    }
+}
+
+// Рендеринг гравців на полі
+function renderPitch(containerId, players) {
     const container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = "";
 
+    if (!players || players.length === 0) return;
+
     const coords = [
-        { x: 50, y: 88 },
-        { x: 15, y: 70 }, { x: 38, y: 74 }, { x: 62, y: 74 }, { x: 85, y: 70 },
-        { x: 30, y: 48 }, { x: 50, y: 52 }, { x: 70, y: 48 },
-        { x: 20, y: 22 }, { x: 50, y: 18 }, { x: 80, y: 22 }
+        { x: 50, y: 85 }, // ВР
+        { x: 15, y: 68 }, { x: 38, y: 72 }, { x: 62, y: 72 }, { x: 85, y: 68 }, // Захисники
+        { x: 30, y: 46 }, { x: 50, y: 50 }, { x: 70, y: 46 }, // Півзахисники
+        { x: 20, y: 20 }, { x: 50, y: 15 }, { x: 80, y: 20 }  // Нападники
     ];
 
     players.forEach((p, i) => {
         if (!coords[i]) return;
         const node = document.createElement("div");
         node.className = "pitch-player-node";
+        node.style.position = "absolute";
         node.style.left = `${coords[i].x}%`;
         node.style.top = `${coords[i].y}%`;
-        node.innerHTML = `<div class="player-dot">${p.num}</div><div class="player-name-tag">${p.name}</div>`;
+        node.style.transform = "translate(-50%, -50%)";
+        node.style.textAlign = "center";
+
+        node.innerHTML = `
+            <div style="width: 26px; height: 26px; background: #ffeb3b; color: #000; font-weight: bold; border-radius: 50%; line-height: 26px; margin: 0 auto; border: 2px solid #000; font-size: 12px;">${p.num}</div>
+            <div style="background: rgba(0,0,0,0.75); color: #fff; padding: 2px 6px; border-radius: 3px; font-size: 10px; margin-top: 2px; white-space: nowrap;">${p.name}</div>
+        `;
         container.appendChild(node);
     });
 }
