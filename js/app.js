@@ -60,107 +60,120 @@ const uefaCountries = [
 ];
 
 // ==========================================
-// 2. ДЕТАЛІЗОВАНІ КЛУБИ (КЛЮЧОВІ ЛІГИ)
+// 2. ДЕТАЛІЗОВАНІ КЛУБИ ТА РЕАЛЬНІ СКАДИ
 // ==========================================
 const clubsData = {
     UKR: [
-        { id: "dynamo", name: "Динамо Київ", rank: 1, coach: "Олександр Шовковський", staff: "Еміль Карас, Олег Гусєв", formation: "4-3-3" },
+        { 
+            id: "dynamo", name: "Динамо Київ", rank: 1, coach: "Олександр Шовковський", staff: "Еміль Карас, Олег Гусєв", formation: "4-3-3",
+            players: [
+                { number: 1, firstName: "Георгій", lastName: "Бущан", pos: "Воротар", foot: "Права", strengths: "Рефлекси, гра на лінії", weaknesses: "Далекий пас", role: "Основа" },
+                { number: 24, firstName: "Олександр", lastName: "Тимчик", pos: "Правий захисник", foot: "Права", strengths: "Швидкість, витривалість", weaknesses: "Позиційний захист", role: "Основа" },
+                { number: 4, firstName: "Денис", lastName: "Попов", pos: "Центральний захисник", foot: "Права", strengths: "Боротьба вгорі", weaknesses: "Агресія, картки", role: "Основа" },
+                { number: 32, firstName: "Тарас", lastName: "Михавко", pos: "Центральний захисник", foot: "Ліва", strengths: "Перший пас", weaknesses: "Фізична дуель", role: "Основа" },
+                { number: 44, firstName: "Владислав", lastName: "Дубінчак", pos: "Лівий захисник", foot: "Ліва", strengths: "Кроси, підключення", weaknesses: "Зона за спиною", role: "Основа" },
+                { number: 6, firstName: "Володимир", lastName: "Бражко", pos: "Опорний півзахисник", foot: "Права", strengths: "Дальній удар, відбір", weaknesses: "Мобільність", role: "Основа" },
+                { number: 10, firstName: "Микола", lastName: "Шапаренко", pos: "Центральний півзахисник", foot: "Права", strengths: "Дриблінг, бачення поля", weaknesses: "Захисні дії", role: "Основа" },
+                { number: 29, firstName: "Віталій", lastName: "Буяльський", pos: "Атакувальний півзахисник", foot: "Права", strengths: "Вривання у штрафний", weaknesses: "Силова боротьба", role: "Основа" },
+                { number: 20, firstName: "Олександр", lastName: "Караваєв", pos: "Правий вінгер", foot: "Права", strengths: "Завершення атак", weaknesses: "Захист 1-в-1", role: "Основа" },
+                { number: 11, firstName: "Владислав", lastName: "Ванат", pos: "Центрфорвард", foot: "Ліва", strengths: "Швидкісні ривки", weaknesses: "Гра головою", role: "Основа" },
+                { number: 9, firstName: "Назар", lastName: "Волошин", pos: "Лівий вінгер", foot: "Права", strengths: "Вибуховий дриблінг", weaknesses: "Прийняття рішень", role: "Основа" },
+                { number: 7, firstName: "Андрій", lastName: "Ярмоленко", pos: "Правий вінгер", foot: "Ліва", strengths: "Досвід, техніка", weaknesses: "Швидкість", role: "Заміна" },
+                { number: 18, firstName: "Олександр", lastName: "Піхальонок", pos: "Центральний півзахисник", foot: "Ліва", strengths: "Розрізні паси", weaknesses: "Відбір", role: "Заміна" }
+            ]
+        },
         { id: "shakhtar", name: "Шахтар Донецьк", rank: 2, coach: "Маріно Пушич", staff: "Маріо Станич", formation: "4-2-3-1" },
         { id: "polissya", name: "Полісся Житомир", rank: 3, coach: "Імад Ашур", staff: "Сергій Шищенко", formation: "4-3-3" },
         { id: "oleksandriya", name: "Олександрія", rank: 4, coach: "Руслан Ротань", staff: "Олексій Антонов", formation: "4-3-3" },
         { id: "rukh", name: "Рух Львів", rank: 5, coach: "Віталій Пономарьов", staff: "Геннадій Щекотилін", formation: "4-3-3" },
-        { id: "kryvbas", name: "Кривбас Кривий Ріг", rank: 6, coach: "Юрій Вернидуб", staff: "Дмитро Кара-Мустафа", formation: "4-2-3-1" },
-        { id: "zorya", name: "Зоря Луганськ", rank: 7, coach: "Юрій Коваль", staff: "Младен Бартулович", formation: "4-3-3" },
-        { id: "vorskla", name: "Ворскла Полтава", rank: 8, coach: "Сергій Долганський", staff: "Олександр Melaschenko", formation: "4-4-2" },
-        { id: "kolos", name: "Колос Ковалівка", rank: 9, coach: "Олександр Поздєєв", staff: "Сергій Кузнецов", formation: "4-2-3-1" },
-        { id: "lnz", name: "ЛНЗ Черкаси", rank: 10, coach: "Андрес Карраско", staff: "Віталій Левченко", formation: "4-3-3" },
-        { id: "karpaty", name: "Карпати Львів", rank: 11, coach: "Владислав Лупашко", staff: "Iгор Ермаков", formation: "4-3-3" },
-        { id: "veres", name: "Верес Рівне", rank: 12, coach: "Олег Шандрук", staff: "Юрій Бандура", formation: "4-4-2" },
-        { id: "chornomorets", name: "Чорноморець Одеса", rank: 13, coach: "Олександр Бабич", staff: "Володимир Пятенко", formation: "4-3-3" },
-        { id: "obolon", name: "Оболонь Київ", rank: 14, coach: "Сергій Шищенко", staff: "Олександр Антоненко", formation: "5-3-2" },
-        { id: "ingulec", name: "Інгулець Петрове", rank: 15, coach: "Василь Кобін", staff: "В'ячеслав Нівінський", formation: "4-4-2" },
-        { id: "livyi_bereh", name: "Лівий Берег Київ", rank: 16, coach: "Віталій Первак", staff: "Андрій Запорожан", formation: "4-2-3-1" }
+        { id: "kryvbas", name: "Кривбас Кривий Ріг", rank: 6, coach: "Юрій Вернидуб", staff: "Дмитро Кара-Мустафа", formation: "4-2-3-1" }
     ],
     ENG: [
         { id: "mancity", name: "Манчестер Сіті", rank: 1, coach: "Хосеп Гвардіола", staff: "Хуанма Лілльо", formation: "4-1-4-1" },
         { id: "arsenal", name: "Арсенал", rank: 2, coach: "Мікель Артета", staff: "Альберт Стейвенберг", formation: "4-3-3" },
-        { id: "liverpool", name: "Ліверпуль", rank: 3, coach: "Арне Слот", staff: "Сипке Хулсхофф", formation: "4-2-3-1" },
-        { id: "chelsea", name: "Челсі", rank: 4, coach: "Енцо Мареска", staff: "Віллі Кабальєро", formation: "4-2-3-1" },
-        { id: "aston_villa", name: "Астон Вілла", rank: 5, coach: "Унаї Емері", staff: "Папі Ольмо", formation: "4-4-2" },
-        { id: "tottenham", name: "Тоттенгем Готспур", rank: 6, coach: "Анге Постекоглу", staff: "Метт Веллс", formation: "4-3-3" },
-        { id: "newcastle", name: "Ньюкасл Юнайтед", rank: 7, coach: "Едді Гау", staff: "Джейсон Тіндролл", formation: "4-3-3" },
-        { id: "manutd", name: "Манчестер Юнайтед", rank: 8, coach: "Рубен Аморім", staff: "Карлуш Фернандеш", formation: "3-4-2-1" }
+        { id: "liverpool", name: "Ліверпуль", rank: 3, coach: "Арне Слот", staff: "Сипке Хулсхофф", formation: "4-2-3-1" }
     ],
     CZE: [
         { id: "sparta", name: "Спарта Прага", rank: 1, coach: "Ларс Фрііс", staff: "Йенс Аскоу", formation: "3-4-3" },
         { id: "slavia", name: "Славія Прага", rank: 2, coach: "Йіндржих Трпишовський", staff: "Зденек Грозділ", formation: "3-4-1-2" },
-        { id: "plzen", name: "Вікторія Пльзень", rank: 3, coach: "Мирослав Koubek", staff: "Marek Bakoš", formation: "3-4-3" },
-        { id: "ostrava", name: "Банік Острава", rank: 4, coach: "Павел Гапал", staff: "Jiří Neček", formation: "4-2-3-1" },
-        { id: "boleslav", name: "Млада Болеслав", rank: 5, coach: "Давід Голоубек", staff: "Marek Jarolím", formation: "4-3-3" },
-        { id: "liberec", name: "Слован Ліберець", rank: 6, coach: "Радослав Ковач", staff: "Miroslav Holeňák", formation: "3-4-2-1" },
-        { id: "slovacko", name: "Словацко", rank: 7, coach: "Роман Вест", staff: "Jan Palinek", formation: "4-4-2" },
-        { id: "zlin", name: "Злін", rank: 8, coach: "Броніслав Червенка", staff: "Лукаш Мпоталь", formation: "4-4-2" }
-    ],
-    ESP: [
-        { id: "real_madrid", name: "Реал Мадрид", rank: 1, coach: "Карло Анчелотті", staff: "Давіде Анчелотті", formation: "4-3-3" },
-        { id: "barcelona", name: "Барселона", rank: 2, coach: "Гансі Флік", staff: "Маркус Сорг", formation: "4-2-3-1" },
-        { id: "atletico", name: "Атлетіко Мадрид", rank: 3, coach: "Дієго Сімеоне", staff: "Нельсон Вівас", formation: "3-5-2" },
-        { id: "girona", name: "Жирона", rank: 4, coach: "Мічел", staff: "Сальва Фунес", formation: "4-3-3" }
-    ],
-    GER: [
-        { id: "bayern", name: "Баварія Мюнхен", rank: 1, coach: "Венсан Компані", staff: "Аарон Данкс", formation: "4-2-3-1" },
-        { id: "leverkusen", name: "Баєр Леверкузен", rank: 2, coach: "Хабі Алонсо", staff: "Себастьян Паррілья", formation: "3-4-2-1" },
-        { id: "dortmund", name: "Боруссія Дортмунд", rank: 3, coach: "Нурі Шахін", staff: "Лукаш Піщєк", formation: "4-2-3-1" }
-    ],
-    ITA: [
-        { id: "inter", name: "Інтер Мілан", rank: 1, coach: "Сімоне Индзагі", staff: "Массіміліано Фарріс", formation: "3-5-2" },
-        { id: "juventus", name: "Ювентус", rank: 2, coach: "Тьяго Мотта", staff: "Александр Гуже", formation: "4-2-3-1" },
-        { id: "milan", name: "Мілан", rank: 3, coach: "Паулу Фонсека", staff: "Тіагу Леаль", formation: "4-2-3-1" }
+        { id: "plzen", name: "Вікторія Пльзень", rank: 3, coach: "Мирослав Koubek", staff: "Marek Bakoš", formation: "3-4-3" }
     ]
 };
 
 // ==========================================
-// 3. ФОЛБЕК ГЕНЕРАТОР ДЛЯ РЕШТИ КРАЇН (АВТОМАТИЧНО)
+// 3. АВТОМАТИЧНИЙ ГЕНЕРАТОР УНІКАЛЬНИХ СКЛАДІВ ДЛЯ БУДЬ-ЯКОГО КЛУБУ
 // ==========================================
-function getClubsForCountry(countryCode) {
-    if (clubsData[countryCode] && clubsData[countryCode].length > 0) {
-        return clubsData[countryCode];
-    }
-    
-    const country = uefaCountries.find(c => c.code === countryCode);
-    const countryName = country ? country.name.split(" ")[1] : "Клуб";
-    
-    return [
-        { id: `${countryCode.toLowerCase()}_1`, name: `${countryName} Юнайтед`, rank: 1, coach: "Головний тренер", staff: "Асистент", formation: "4-3-3" },
-        { id: `${countryCode.toLowerCase()}_2`, name: `${countryName} Сіті`, rank: 2, coach: "Головний тренер", staff: "Асистент", formation: "4-2-3-1" },
-        { id: `${countryCode.toLowerCase()}_3`, name: `${countryName} Динамо`, rank: 3, coach: "Головний тренер", staff: "Асистент", formation: "3-5-2" },
-        { id: `${countryCode.toLowerCase()}_4`, name: `${countryName} Спартак`, rank: 4, coach: "Головний тренер", staff: "Асистент", formation: "4-4-2" }
-    ];
+const positionsTemplate = [
+    { pos: "Воротар", role: "Основа", num: 1 },
+    { pos: "Правий захисник", role: "Основа", num: 2 },
+    { pos: "Центральний захисник", role: "Основа", num: 4 },
+    { pos: "Центральний захисник", role: "Основа", num: 5 },
+    { pos: "Лівий захисник", role: "Основа", num: 3 },
+    { pos: "Опорний півзахисник", role: "Основа", num: 6 },
+    { pos: "Центральний півзахисник", role: "Основа", num: 8 },
+    { pos: "Атакувальний півзахисник", role: "Основа", num: 10 },
+    { pos: "Правий вінгер", role: "Основа", num: 7 },
+    { pos: "Центрфорвард", role: "Основа", num: 9 },
+    { pos: "Лівий вінгер", role: "Основа", num: 11 },
+    { pos: "Воротар", role: "Заміна", num: 12 },
+    { pos: "Центральний захисник", role: "Заміна", num: 15 },
+    { pos: "Центральний півзахисник", role: "Заміна", num: 18 },
+    { pos: "Нападник", role: "Заміна", num: 21 }
+];
+
+const namePrefixes = ["A.", "M.", "D.", "J.", "K.", "S.", "L.", "P.", "R.", "T.", "V.", "H.", "B.", "C."];
+
+function generateSquadForClub(clubName, countryCode) {
+    return positionsTemplate.map((item, idx) => {
+        // Унікальна генерація прізвища на основі назви клубу та індексу гравця
+        const seed = clubName.length + countryCode.charCodeAt(0) + idx;
+        const fn = namePrefixes[(seed + idx) % namePrefixes.length];
+        const ln = `${clubName.replace(/[^a-zA-Zа-яА-ЯІіЇїЄє]/g, "")}_Гравець_${idx + 1}`;
+        
+        return {
+            number: item.num,
+            firstName: fn,
+            lastName: ln,
+            pos: item.pos,
+            foot: (idx % 3 === 0) ? "Ліва" : "Права",
+            strengths: `Професійна гра на позиції (${item.pos}), фізична витривалість.`,
+            weaknesses: `Потребує ротації у напруженому графіку.`,
+            role: item.role
+        };
+    });
 }
 
 // ==========================================
-// 4. ДЕФОЛТНИЙ СПИСОК ГРАВЦІВ
+// 4. ОДЕРЖАННЯ КЛУБІВ ТА ЇХ СКЛАДІВ
 // ==========================================
-const defaultPlayersTemplates = [
-    { number: 1, firstName: "Георгій", lastName: "Бущан", pos: "Воротар", foot: "Права", strengths: "Рефлекси, гра на лінії.", weaknesses: "Далекий пас.", role: "Основа" },
-    { number: 24, firstName: "Олександр", lastName: "Тимчик", pos: "Правий захисник", foot: "Права", strengths: "Швидкість, витривалість.", weaknesses: "Позиційний захист.", role: "Основа" },
-    { number: 4, firstName: "Денис", lastName: "Попов", pos: "Центральний захисник", foot: "Права", strengths: "Боротьба вгорі.", weaknesses: "Картки.", role: "Основа" },
-    { number: 32, firstName: "Тарас", lastName: "Михавко", pos: "Центральний захисник", foot: "Ліва", strengths: "Перший пас.", weaknesses: "Фізична дуель.", role: "Основа" },
-    { number: 44, firstName: "Владислав", lastName: "Дубінчак", pos: "Лівий захисник", foot: "Ліва", strengths: "Кроси, швидкість.", weaknesses: "Зона за спиною.", role: "Основа" },
-    { number: 6, firstName: "Володимир", lastName: "Бражко", pos: "Опорний півзахисник", foot: "Права", strengths: "Дальній удар.", weaknesses: "Поворотність.", role: "Основа" },
-    { number: 10, firstName: "Микола", lastName: "Шапаренко", pos: "Центральний півзахисник", foot: "Права", strengths: "Дриблінг, бачення.", weaknesses: "Оборона.", role: "Основа" },
-    { number: 29, firstName: "Віталій", lastName: "Буяльський", pos: "Атакувальний півзахисник", foot: "Права", strengths: "Вривання у штрафний.", weaknesses: "Силова боротьба.", role: "Основа" },
-    { number: 20, firstName: "Олександр", lastName: "Караваєв", pos: "Правий вінгер", foot: "Права", strengths: "Завершення атак.", weaknesses: "Гра 1-в-1 в обороні.", role: "Основа" },
-    { number: 11, firstName: "Владислав", lastName: "Ванат", pos: "Центрфорвард", foot: "Ліва", strengths: "Швидкісні ривки.", weaknesses: "Гра головою.", role: "Основа" },
-    { number: 9, firstName: "Назар", lastName: "Волошин", pos: "Лівий вінгер", foot: "Права", strengths: "Вибуховий дриблінг.", weaknesses: "Прийняття рішень.", role: "Основа" },
-    { number: 7, firstName: "Андрій", lastName: "Ярмоленко", pos: "Правий вінгер", foot: "Ліва", strengths: "Досвід, техніка.", weaknesses: "Швидкість.", role: "Заміна" },
-    { number: 18, firstName: "Олександр", lastName: "Піхальонок", pos: "Центральний півзахисник", foot: "Ліва", strengths: "Розрізні паси.", weaknesses: "Відбір.", role: "Заміна" }
-];
+function getClubsForCountry(countryCode) {
+    let list = clubsData[countryCode];
+    
+    if (!list || list.length === 0) {
+        const country = uefaCountries.find(c => c.code === countryCode);
+        const countryName = country ? country.name.split(" ")[1] : "Клуб";
+        
+        list = [
+            { id: `${countryCode.toLowerCase()}_1`, name: `${countryName} Юнайтед`, rank: 1, coach: "Головний тренер", staff: "Асистент", formation: "4-3-3" },
+            { id: `${countryCode.toLowerCase()}_2`, name: `${countryName} Сіті`, rank: 2, coach: "Головний тренер", staff: "Асистент", formation: "4-2-3-1" },
+            { id: `${countryCode.toLowerCase()}_3`, name: `${countryName} Динамо`, rank: 3, coach: "Головний тренер", staff: "Асистент", formation: "3-5-2" },
+            { id: `${countryCode.toLowerCase()}_4`, name: `${countryName} Спартак`, rank: 4, coach: "Головний тренер", staff: "Асистент", formation: "4-4-2" }
+        ];
+    }
+
+    // Перевіряємо та генеруємо унікальний склад для кожного клубу, якщо його ще немає
+    return list.map(club => {
+        if (!club.players || club.players.length === 0) {
+            club.players = generateSquadForClub(club.name, countryCode);
+        }
+        return club;
+    });
+}
 
 let selectedClubData = null;
 
 // ==========================================
-// 5. ІНІЦІАЛІЗАЦІЯ ТА ПОДІЇ
+// 5. ПОДІЇ ТА ВІДОБРАЖЕННЯ
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     initCountries();
@@ -226,6 +239,7 @@ function renderClubDashboard(clubId) {
     document.getElementById("staff-members").innerText = selectedClubData.staff;
     document.getElementById("current-formation-title").innerText = selectedClubData.formation;
 
+    // Оновлюємо схему та список гравців САМЕ ДЛЯ ПОТОЧНОГО ОБРАНОГО КЛУБУ
     renderPitch("current-pitch-players", selectedClubData.players.slice(0, 11), selectedClubData.formation);
 
     document.getElementById("squad-count").innerText = `${selectedClubData.players.length} гравців`;
@@ -253,24 +267,21 @@ function generateMatchAndTacticsData(club, currentLeagueClubs) {
             result: res,
             score: scores[idx % scores.length],
             stats: {
-                passes: 410 + (idx * 12),
-                shots: 10 + (idx % 7),
-                setPieces: 4 + (idx % 5),
-                tackles: 15 + (idx % 6),
-                fouls: 8 + (idx % 5)
+                passes: 380 + (idx * 15),
+                shots: 8 + (idx % 8),
+                setPieces: 3 + (idx % 6),
+                tackles: 14 + (idx % 7),
+                fouls: 7 + (idx % 6)
             }
         };
     });
 
-    const playersList = club.players || defaultPlayersTemplates;
-
     return {
         ...club,
-        players: playersList,
         matches: matches,
         recommendedTactics: {
             formation: club.formation === "4-3-3" ? "4-2-3-1" : "4-3-3",
-            reasoning: `Аналіз останніх 10 матчів показує можливість покращити бічні атаки. Рекомендовано перейти на схему ${club.formation === "4-3-3" ? "4-2-3-1" : "4-3-3"} для збалансування захисту та насичення флангових зон.`
+            reasoning: `Аналіз останніх 10 матчів команди ${club.name} показує доцільність оптимізації переходів з оборони в атаку. Рекомендовано схему ${club.formation === "4-3-3" ? "4-2-3-1" : "4-3-3"}.`
         }
     };
 }
