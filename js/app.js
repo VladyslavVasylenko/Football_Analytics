@@ -1,5 +1,75 @@
 let currentLang = 'uk';
-const translationsCache = {};
+
+const translations = {
+    uk: {
+        title: "⚽ Футбольний Психопат",
+        subtitle: "Тактичні профілі та детальна статистика гравців",
+        search_title: "🔍 Вибір клубу для аналітики",
+        btn_search: "Завантажити",
+        squad: "Склад команди",
+        starter: "Основа", sub: "Заміна",
+        lbl_pos: "Позиція:", lbl_foot: "Робоча нога:", lbl_stamina: "Витривалість:",
+        lbl_strengths: "💪 Сильні сторони", lbl_weaknesses: "⚠️ Слабкі сторони",
+        lbl_tactics_title: "📋 Тактична роль та зона",
+        lbl_role: "🎯 Роль:", lbl_zone: "📍 Зона:",
+        lbl_def: "🛡️ Пресинг:", lbl_workrate: "🏃‍♂️ Обсяг роботи:",
+        lbl_heatmap: "🔥 Зони активності (Heatmap)",
+        lbl_stats: "📈 Статистика",
+        st_goals: "Голи", st_assists: "Асисти", st_rating: "Рейтинг",
+        foot_right: "Права", foot_left: "Ліва"
+    },
+    en: {
+        title: "⚽ Football Psychopath",
+        subtitle: "Tactical profiles and detailed player statistics",
+        search_title: "🔍 Select Club for Analytics",
+        btn_search: "Load Data",
+        squad: "Team Squad",
+        starter: "Starter", sub: "Substitute",
+        lbl_pos: "Position:", lbl_foot: "Preferred foot:", lbl_stamina: "Stamina:",
+        lbl_strengths: "💪 Strengths", lbl_weaknesses: "⚠️ Weaknesses",
+        lbl_tactics_title: "📋 Tactical Role & Zone",
+        lbl_role: "🎯 Role:", lbl_zone: "📍 Zone:",
+        lbl_def: "🛡️ Pressing:", lbl_workrate: "🏃‍♂️ Work Rate:",
+        lbl_heatmap: "🔥 Activity Heatmap",
+        lbl_stats: "📈 Performance Stats",
+        st_goals: "Goals", st_assists: "Assists", st_rating: "Rating",
+        foot_right: "Right", foot_left: "Left"
+    },
+    cs: {
+        title: "⚽ Fotbalový Psychopat",
+        subtitle: "Taktické profily a podrobná statistika hráčů",
+        search_title: "🔍 Výběr klubu pro analytiku",
+        btn_search: "Načíst",
+        squad: "Sestava týmu",
+        starter: "Základ", sub: "Lavička",
+        lbl_pos: "Pozice:", lbl_foot: "Silnější noha:", lbl_stamina: "Vytrvalost:",
+        lbl_strengths: "💪 Silné stránky", lbl_weaknesses: "⚠️ Slabé stránky",
+        lbl_tactics_title: "📋 Taktická role a zóna",
+        lbl_role: "🎯 Role:", lbl_zone: "📍 Zóna:",
+        lbl_def: "🛡️ Presink:", lbl_workrate: "🏃‍♂️ Pracovité tempo:",
+        lbl_heatmap: "🔥 Aktivita na hřišti (Heatmap)",
+        lbl_stats: "📈 Statistika výkonu",
+        st_goals: "Góly", st_assists: "Asistence", st_rating: "Hodnocení",
+        foot_right: "Pravá", foot_left: "Levá"
+    },
+    ru: {
+        title: "⚽ Футбольный Психопат",
+        subtitle: "Тактические профили и детальная статистика игроков",
+        search_title: "🔍 Выбор клуба для аналитики",
+        btn_search: "Загрузить",
+        squad: "Состав команды",
+        starter: "Основа", sub: "Замена",
+        lbl_pos: "Позиция:", lbl_foot: "Рабочая нога:", lbl_stamina: "Выносливость:",
+        lbl_strengths: "💪 Сильные стороны", lbl_weaknesses: "⚠️ Слабые стороны",
+        lbl_tactics_title: "📋 Тактическая роль и зона",
+        lbl_role: "🎯 Роль:", lbl_zone: "📍 Зона:",
+        lbl_def: "🛡️ Прессинг:", lbl_workrate: "🏃‍♂️ Объем работы:",
+        lbl_heatmap: "🔥 Зоны активности (Heatmap)",
+        lbl_stats: "📈 Статистика",
+        st_goals: "Голы", st_assists: "Ассисты", st_rating: "Рейтинг",
+        foot_right: "Правая", foot_left: "Левая"
+    }
+};
 
 const playersData = [
     {
@@ -40,43 +110,61 @@ const playersData = [
     }
 ];
 
-// Завантаження файлу локалізації через fetch
-async function loadTranslation(lang) {
-    if (translationsCache[lang]) {
-        return translationsCache[lang];
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    const langSelect = document.getElementById("lang-select");
+    const searchBtn = document.getElementById("search-btn");
+    const clubInput = document.getElementById("club-input");
+    const countrySelect = document.getElementById("country-select");
+    const modal = document.getElementById("player-modal");
+    const closeBtn = document.getElementById("close-modal-btn");
 
-    try {
-        const response = await fetch(`./locales/${lang}.json`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        translationsCache[lang] = data;
-        return data;
-    } catch (error) {
-        console.error(`Помилка завантаження мови (${lang}):`, error);
-        return null;
+    langSelect.addEventListener("change", (e) => {
+        currentLang = e.target.value;
+        updateUI();
+    });
+
+    searchBtn.addEventListener("click", executeSearch);
+
+    clubInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") executeSearch();
+    });
+
+    countrySelect.addEventListener("change", () => {
+        document.getElementById("club-country-badge").innerText = countrySelect.value;
+    });
+
+    closeBtn.addEventListener("click", closeModal);
+    
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    updateUI();
+});
+
+function executeSearch() {
+    const clubValue = document.getElementById("club-input").value.trim();
+    const countryValue = document.getElementById("country-select").value;
+
+    if (clubValue) {
+        document.getElementById("club-title").innerText = clubValue.toLowerCase().startsWith("фк") ? clubValue : `ФК ${clubValue}`;
+        document.getElementById("club-country-badge").innerText = countryValue;
     }
 }
 
-async function setLanguage(lang) {
-    const translations = await loadTranslation(lang);
-    if (!translations) return;
-
-    currentLang = lang;
-    updateLanguageUI(translations);
-    renderPlayersList(translations);
-}
-
-function updateLanguageUI(t) {
+function updateUI() {
+    const t = translations[currentLang];
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
         if (t[key]) el.innerText = t[key];
     });
+    renderPlayersList();
 }
 
-function renderPlayersList(t) {
+function renderPlayersList() {
     const container = document.getElementById("players-list");
     container.innerHTML = "";
+    const t = translations[currentLang];
 
     playersData.forEach(player => {
         const card = document.createElement("div");
@@ -85,28 +173,28 @@ function renderPlayersList(t) {
 
         card.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3>${player.name[currentLang]}</h3>
-                <span class="status-pill ${player.status}">${t[player.status] || player.status}</span>
+                <h3 style="font-size:1rem;">${player.name[currentLang]}</h3>
+                <span class="status-pill ${player.status}">${t[player.status]}</span>
             </div>
-            <p style="color: var(--text-secondary); margin-top:5px;">${player.pos[currentLang]}</p>
+            <p style="color: var(--text-secondary); margin-top:4px; font-size: 0.825rem;">${player.pos[currentLang]}</p>
         `;
         container.appendChild(card);
     });
 }
 
-async function openPlayerModal(playerId) {
+function openPlayerModal(playerId) {
     const player = playersData.find(p => p.id === playerId);
     if (!player) return;
 
-    const t = await loadTranslation(currentLang);
+    const t = translations[currentLang];
     const lang = currentLang;
 
     document.getElementById('modal-player-name').innerText = player.name[lang];
-    document.getElementById('modal-player-status').innerText = t[player.status] || player.status;
+    document.getElementById('modal-player-status').innerText = t[player.status];
     document.getElementById('modal-player-status').className = `status-pill ${player.status}`;
 
     document.getElementById('modal-player-pos').innerText = player.pos[lang];
-    document.getElementById('modal-player-foot').innerText = t[player.footKey] || player.footKey;
+    document.getElementById('modal-player-foot').innerText = t[player.footKey];
     document.getElementById('modal-player-stamina').innerText = player.stamina;
     document.getElementById('modal-player-strengths').innerText = player.strengths[lang];
     document.getElementById('modal-player-weaknesses').innerText = player.weaknesses[lang];
@@ -121,7 +209,18 @@ async function openPlayerModal(playerId) {
     document.getElementById('m-rating').innerText = player.detailedStats.rating;
 
     renderHeatmap(player.heatmap);
-    document.getElementById('player-modal').classList.remove('hidden');
+
+    const modal = document.getElementById('player-modal');
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden'; // Блокуємо скролл під модалкою
+}
+
+function closeModal() {
+    const modal = document.getElementById('player-modal');
+    modal.classList.add('hidden');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
 }
 
 function renderHeatmap(intensityValues) {
@@ -131,7 +230,6 @@ function renderHeatmap(intensityValues) {
     intensityValues.forEach(value => {
         const cell = document.createElement('div');
         cell.className = 'heatmap-cell';
-        
         let opacity = value / 100;
         if (opacity > 0) {
             cell.style.backgroundColor = `rgba(239, 68, 68, ${opacity})`;
@@ -139,21 +237,3 @@ function renderHeatmap(intensityValues) {
         grid.appendChild(cell);
     });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-    const langSelect = document.getElementById("lang-select");
-    const modal = document.getElementById("player-modal");
-    const closeBtn = document.getElementById("close-modal-btn");
-
-    langSelect.addEventListener("change", (e) => {
-        setLanguage(e.target.value);
-    });
-
-    closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
-    window.addEventListener("click", (e) => {
-        if (e.target === modal) modal.classList.add("hidden");
-    });
-
-    // Початкова ініціалізація
-    setLanguage(currentLang);
-});
