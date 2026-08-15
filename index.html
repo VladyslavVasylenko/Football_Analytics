@@ -12,7 +12,7 @@
     <div class="app-wrapper">
         <header class="main-header">
             <div class="header-top">
-                <h1 data-i18n="title">⚽ Футбольний Психопат</h1>
+                <h1>⚽ Футбольний Психопат</h1>
                 <select id="lang-select" class="lang-select">
                     <option value="uk" selected>🇺🇦 UA</option>
                     <option value="en">🇬🇧 EN</option>
@@ -20,85 +20,83 @@
                     <option value="ru">🇷🇺 RU</option>
                 </select>
             </div>
-            <p data-i18n="subtitle">Аналітика клубів UEFA та детальна статистика гравців</p>
+            <p>Аналітика всіх клубів вищих ліг UEFA, тренерських штабів та гравців</p>
         </header>
 
         <main class="main-content">
             <!-- БЛОК ПОШУКУ ТА КРАЇН UEFA -->
             <section class="search-card">
-                <h3 data-i18n="search_title">🇪🇺 Вибір клубу UEFA</h3>
+                <h3>🇪🇺 Вибір країни та клубу вищої ліги</h3>
                 <div class="search-form">
-                    <select id="country-select">
-                        <!-- Динамічно 54 країни -->
-                    </select>
-                    <select id="club-select">
-                        <!-- Динамічно клуби -->
-                    </select>
-                    <button type="button" id="search-btn" class="btn-primary" data-i18n="btn_search">Аналізувати</button>
+                    <select id="country-select"></select>
+                    <select id="club-select"></select>
+                    <button type="button" id="search-btn" class="btn-primary">Аналізувати</button>
                 </div>
             </section>
 
-            <!-- КАРТКА КЛУБУ -->
+            <!-- КАРТКА КЛУБУ ТА ТРЕНЕРСЬКОГО ШТАБУ -->
             <section class="club-card">
                 <div class="club-header-info">
                     <div>
                         <h2 id="club-title">-</h2>
                         <p class="coach-text">👨‍💼 <span data-i18n="lbl_coach">Головний тренер:</span> <strong id="club-coach">-</strong></p>
+                        <p class="staff-text">📋 <span data-i18n="lbl_staff">Штаб:</span> <span id="club-staff">-</span></p>
                     </div>
                     <span id="club-country-badge" class="country-badge">-</span>
                 </div>
             </section>
 
-            <!-- ОСТАННІ 10 МАТЧІВ -->
+            <!-- ОСТАННІ МАТЧІ -->
             <section class="matches-section">
-                <h3 data-i18n="lbl_last_matches">📊 Останні 10 матчів</h3>
+                <h3 data-i18n="lbl_last_matches">📊 Останні матчі команди</h3>
                 <div id="matches-list" class="matches-grid"></div>
             </section>
 
-            <!-- СПИСОК ГРАВЦІВ -->
+            <!-- ПОВНИЙ СКЛАД ГРАВЦІВ -->
             <section class="squad-section">
-                <h3 data-i18n="squad">Склад та статистика гравців</h3>
+                <h3 data-i18n="squad">Повний склад гравців та статистика</h3>
                 <div id="players-list" class="players-grid"></div>
             </section>
         </main>
     </div>
 
-    <!-- МОДАЛЬНЕ ВІКНО ПОВНОЇ СТАТИСТИКИ ГРАВЦЯ -->
-    <div id="player-modal" class="modal hidden" role="dialog">
+    <!-- АДАПТИВНЕ МОДАЛЬНЕ ВІКНО СТАТИСТИКИ ГРАВЦЯ -->
+    <div id="player-modal" class="modal hidden" role="dialog" aria-modal="true">
         <div class="modal-content">
-            <button type="button" id="close-modal-btn" class="close-modal">&times;</button>
-            
-            <div class="modal-header">
-                <h2 id="modal-player-name">Ім'я Гравця</h2>
-                <span id="modal-player-status" class="status-pill starter">Основа</span>
+            <div class="modal-sticky-header">
+                <div>
+                    <h2 id="modal-player-name">Ім'я Гравця</h2>
+                    <span id="modal-player-status" class="status-pill starter">Основа</span>
+                </div>
+                <button type="button" id="close-modal-btn" class="close-modal" aria-label="Close">&times;</button>
             </div>
             
             <div class="modal-body-grid">
                 <div class="info-block">
-                    <div><strong data-i18n="lbl_pos">Позиція:</strong> <span id="modal-player-pos">-</span></div>
-                    <div><strong data-i18n="lbl_foot">Робоча нога:</strong> <span id="modal-player-foot">-</span></div>
-                    <div><strong data-i18n="lbl_stamina">Витривалість:</strong> <span id="modal-player-stamina">-</span></div>
+                    <div><strong>Позиція:</strong> <span id="modal-player-pos">-</span></div>
+                    <div><strong>Робоча нога:</strong> <span id="modal-player-foot">-</span></div>
+                    <div><strong>Витривалість:</strong> <span id="modal-player-stamina">-</span></div>
                 </div>
 
                 <div class="traits-block">
-                    <h4 class="text-green" data-i18n="lbl_strengths">💪 Сильні сторони</h4>
+                    <h4 class="text-green">💪 Сильні сторони</h4>
                     <p id="modal-player-strengths">-</p>
-                    <h4 class="text-red" data-i18n="lbl_weaknesses">⚠️ Слабкі сторони</h4>
+                    <h4 class="text-red">⚠️ Слабкі сторони</h4>
                     <p id="modal-player-weaknesses">-</p>
                 </div>
 
                 <div class="tactical-block grid-full">
-                    <h4 class="text-yellow" data-i18n="lbl_tactics_title">📋 Тактичний профіль</h4>
+                    <h4 class="text-yellow">📋 Тактичний профіль</h4>
                     <div class="tactical-details-card">
-                        <p><strong data-i18n="lbl_role">🎯 Роль:</strong> <span id="m-tac-role">-</span></p>
-                        <p><strong data-i18n="lbl_zone">📍 Зона:</strong> <span id="m-tac-zone">-</span></p>
-                        <p><strong data-i18n="lbl_def">🛡️ Пресинг:</strong> <span id="m-tac-def">-</span></p>
-                        <p><strong data-i18n="lbl_workrate">🏃‍♂️ Обсяг роботи:</strong> <span id="m-tac-workrate">-</span></p>
+                        <p><strong>🎯 Роль:</strong> <span id="m-tac-role">-</span></p>
+                        <p><strong>📍 Зона:</strong> <span id="m-tac-zone">-</span></p>
+                        <p><strong>🛡️ Пресинг:</strong> <span id="m-tac-def">-</span></p>
+                        <p><strong>🏃‍♂️ Обсяг роботи:</strong> <span id="m-tac-workrate">-</span></p>
                     </div>
                 </div>
 
                 <div class="heatmap-block grid-full">
-                    <h4 class="text-yellow" data-i18n="lbl_heatmap">🔥 Теплова карта (Heatmap)</h4>
+                    <h4 class="text-yellow">🔥 Теплова карта (Heatmap)</h4>
                     <div class="pitch-container">
                         <div class="pitch-center-line"></div>
                         <div id="heatmap-grid" class="heatmap-grid"></div>
@@ -106,11 +104,11 @@
                 </div>
 
                 <div class="stats-block grid-full">
-                    <h4 class="text-green" data-i18n="lbl_stats">📈 Повна статистика в єврокубках/лізі</h4>
+                    <h4 class="text-green">📈 Повна статистика сезону</h4>
                     <div class="detailed-stats-grid">
-                        <div class="stat-box"><span class="stat-val" id="m-goals">0</span><span class="stat-lbl" data-i18n="st_goals">Голи</span></div>
-                        <div class="stat-box"><span class="stat-val" id="m-assists">0</span><span class="stat-lbl" data-i18n="st_assists">Асисти</span></div>
-                        <div class="stat-box"><span class="stat-val" id="m-rating">0.0</span><span class="stat-lbl" data-i18n="st_rating">Рейтинг</span></div>
+                        <div class="stat-box"><span class="stat-val" id="m-goals">0</span><span class="stat-lbl">Голи</span></div>
+                        <div class="stat-box"><span class="stat-val" id="m-assists">0</span><span class="stat-lbl">Асисти</span></div>
+                        <div class="stat-box"><span class="stat-val" id="m-rating">0.0</span><span class="stat-lbl">Рейтинг</span></div>
                     </div>
                 </div>
             </div>
