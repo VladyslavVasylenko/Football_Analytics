@@ -1,168 +1,273 @@
-:root {
-    --bg-main: #0f172a;
-    --bg-card: #1e293b;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --accent-blue: #3b82f6;
-    --accent-green: #22c55e;
-    --accent-red: #ef4444;
-    --accent-yellow: #eab308;
-    --border-color: #334155;
-    --touch-size: 44px;
-}
-
+/* ЄДИНИЙ ШРИФТ ДЛЯ ВСЬОГО ПРОЄКТУ */
 * {
     box-sizing: border-box;
-    margin: 0; padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --bg-main: #0b1120;
+    --bg-card: #1e293b;
+    --bg-inner: #0f172a;
+    --text-main: #f8fafc;
+    --text-sub: #94a3b8;
+    --accent: #3b82f6;
+    --accent-green: #22c55e;
+    --accent-red: #ef4444;
+    --border: #334155;
+    --pitch-bg: #15803d;
 }
 
 body {
     background-color: var(--bg-main);
-    color: var(--text-primary);
-    padding: 12px; font-size: 15px; line-height: 1.4;
+    color: var(--text-main);
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
-.app-wrapper { width: 100%; margin: 0 auto; max-width: 1100px; }
-.main-header { margin-bottom: 16px; }
-.header-top { display: flex; justify-content: space-between; align-items: center; }
-.main-header h1 { font-size: 1.25rem; font-weight: 700; }
-.main-header p { color: var(--text-secondary); font-size: 0.825rem; margin-top: 4px; }
-
-.lang-select {
-    background: var(--bg-card); color: var(--text-primary);
-    border: 1px solid var(--border-color); height: 38px; padding: 0 8px;
-    border-radius: 8px; outline: none; cursor: pointer;
+.app-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.search-card {
-    background: var(--bg-card); padding: 14px; border-radius: 12px;
-    border: 1px solid var(--border-color); margin-bottom: 16px;
+.main-header h1 { font-size: 1.5rem; font-weight: 800; }
+.main-header p { font-size: 0.85rem; color: var(--text-sub); }
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
 }
-.search-card h3 { font-size: 0.95rem; margin-bottom: 10px; }
-.search-form { display: flex; flex-direction: column; gap: 10px; }
-.search-form select {
-    width: 100%; height: var(--touch-size);
-    background: var(--bg-main); color: var(--text-primary);
-    border: 1px solid var(--border-color); padding: 0 12px;
-    border-radius: 8px; outline: none; font-size: 0.9rem;
+
+.card h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+}
+
+.card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 10px 0;
+}
+
+/* ФОРМА ВИБОРУ */
+.search-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-group label { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; }
+
+select {
+    width: 100%;
+    height: 42px;
+    background: var(--bg-inner);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+/* ІНФО ПРО КЛУБ */
+.club-header { display: flex; justify-content: space-between; align-items: center; }
+.club-header h2 { border: none; padding: 0; margin: 0; font-size: 1.3rem; }
+.league-details { font-size: 0.85rem; color: var(--text-sub); margin-top: 4px; }
+.rank-badge {
+    background: var(--accent);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.highlight-text { color: var(--accent); font-weight: 700; }
+.staff-details p { margin-bottom: 6px; font-size: 0.9rem; }
+
+/* ФУТБОЛЬНЕ ПОЛЕ ТА РОЗТАШУВАННЯ */
+.soccer-pitch {
+    background-color: var(--pitch-bg);
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    height: 320px;
+    position: relative;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.pitch-line { position: absolute; border: 1px solid rgba(255, 255, 255, 0.4); }
+.center-circle {
+    width: 70px; height: 70px; border-radius: 50%;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.penalty-area-top { width: 120px; height: 50px; top: 0; left: 50%; transform: translateX(-50%); }
+.penalty-area-bottom { width: 120px; height: 50px; bottom: 0; left: 50%; transform: translateX(-50%); }
+
+.pitch-player-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
 }
-.btn-primary {
-    height: var(--touch-size); background: var(--accent-blue);
-    color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
+
+.player-dot {
+    width: 26px; height: 26px;
+    background: #ffffff;
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-.club-card {
-    background: var(--bg-card); padding: 14px; border-radius: 12px;
-    border: 1px solid var(--border-color); margin-bottom: 16px;
-}
-.club-header-info { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-.club-card h2 { font-size: 1.2rem; margin-bottom: 6px; }
-.coach-text, .staff-text { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; }
-.country-badge {
-    background: rgba(59, 130, 246, 0.18); color: var(--accent-blue);
-    padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.78rem;
+.player-name-tag {
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 1px 4px;
+    border-radius: 4px;
+    margin-top: 2px;
     white-space: nowrap;
 }
 
-.matches-section { margin-bottom: 16px; }
-.matches-section h3 { font-size: 1rem; margin-bottom: 10px; }
+/* СПИСОК ГРАВЦІВ */
+.players-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+}
+
+.player-item {
+    background: var(--bg-inner);
+    border: 1px solid var(--border);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+.player-item:hover { border-color: var(--accent); }
+.player-item-left { display: flex; align-items: center; gap: 8px; }
+.player-num { font-weight: 800; color: var(--accent); font-size: 0.9rem; }
+.player-fullname { font-size: 0.85rem; font-weight: 600; }
+.player-pos-badge { font-size: 0.7rem; color: var(--text-sub); }
+
+/* ОСТАННІ 10 МАТЧІВ */
 .matches-grid {
-    display: flex; gap: 8px; overflow-x: auto;
-    padding-bottom: 6px; scrollbar-width: thin;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
 }
-.match-badge {
-    min-width: 100px; background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 8px; padding: 8px; text-align: center; flex-shrink: 0;
-}
-.match-res { font-weight: bold; font-size: 0.78rem; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 4px; }
-.match-res.win { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
-.match-res.draw { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); }
-.match-res.loss { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
-.match-opp { font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.match-score { font-size: 0.85rem; font-weight: bold; margin-top: 2px; }
 
-.squad-section h3 { font-size: 1rem; margin-bottom: 10px; }
-.players-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-.player-card {
-    background: var(--bg-card); border: 1px solid var(--border-color);
-    border-radius: 10px; padding: 12px 14px; cursor: pointer;
+.match-card {
+    min-width: 100px;
+    background: var(--bg-inner);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    flex-shrink: 0;
 }
-.player-card:active { border-color: var(--accent-blue); }
-.player-card-header { display: flex; justify-content: space-between; align-items: center; }
-.player-mini-stats {
-    display: flex; gap: 12px; margin-top: 8px; font-size: 0.8rem; color: var(--text-secondary);
-    background: var(--bg-main); padding: 6px 10px; border-radius: 6px;
+.match-card.active { border-color: var(--accent); background: rgba(59, 130, 246, 0.1); }
+
+.match-res-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
 }
-.player-mini-stats span strong { color: var(--text-primary); }
+.res-win { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+.res-draw { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+.res-loss { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
 
-.status-pill { font-size: 0.72rem; padding: 3px 8px; border-radius: 10px; font-weight: bold; }
-.status-pill.starter { background: rgba(34, 197, 94, 0.18); color: var(--accent-green); }
-.status-pill.sub { background: rgba(234, 179, 8, 0.18); color: var(--accent-yellow); }
+.match-vs { font-size: 0.75rem; color: var(--text-sub); margin: 4px 0; }
+.match-score-val { font-size: 0.9rem; font-weight: 700; }
 
-/* МОДАЛЬНЕ ВІКНО - ВИПРАВЛЕНО НАЛОЖЕННЯ ТА ЗАКРИТТЯ */
+.match-stats-panel {
+    background: var(--bg-inner);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+.stats-bars-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 4px;
+}
+
+/* ТАКТИЧНА ПРОПОЗИЦІЯ */
+.tactical-desc { font-size: 0.85rem; color: var(--text-sub); line-height: 1.4; }
+
+/* МОДАЛЬНЕ ВІКНО */
 .modal {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center;
-    z-index: 9999; padding: 10px; backdrop-filter: blur(4px);
+    background: rgba(0,0,0,0.8);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; padding: 12px;
 }
 .modal.hidden { display: none !important; }
 
 .modal-content {
-    background: var(--bg-card); width: 100%; max-width: 650px;
-    max-height: 85vh; border-radius: 16px; border: 1px solid var(--border-color);
-    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 100%; max-width: 500px;
+    padding: 16px;
 }
 
-.modal-sticky-header {
-    position: sticky; top: 0; background: var(--bg-card);
-    padding: 14px 16px; border-bottom: 1px solid var(--border-color);
-    display: flex; justify-content: space-between; align-items: center; z-index: 10;
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.player-number-badge { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+.modal-header h2 { border: none; padding: 0; margin: 0; font-size: 1.2rem; }
+
+.close-btn {
+    background: none; border: none; color: var(--text-main); font-size: 1.6rem; cursor: pointer;
 }
 
-.close-modal {
-    background: var(--bg-main); border: 1px solid var(--border-color);
-    color: var(--text-primary); font-size: 1.5rem; width: 36px; height: 36px;
-    border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
+.modal-body { display: flex; flex-direction: column; gap: 10px; }
+.modal-info-row { display: flex; justify-content: space-between; font-size: 0.85rem; }
 
-.modal-body-grid {
-    padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+.analysis-box {
+    background: var(--bg-inner);
+    border: 1px solid var(--border);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.825rem;
 }
+.analysis-box h4 { margin-bottom: 4px; font-size: 0.85rem; }
+.text-green h4 { color: var(--accent-green); }
+.text-red h4 { color: var(--accent-red); }
+.text-blue h4 { color: var(--accent); }
 
-.info-block, .traits-block, .tactical-details-card {
-    background: var(--bg-main); padding: 12px; border-radius: 8px;
-    border: 1px solid var(--border-color); font-size: 0.88rem; display: flex; flex-direction: column; gap: 6px;
-}
-.text-green { color: var(--accent-green); }
-.text-red { color: var(--accent-red); }
-.text-yellow { color: var(--accent-yellow); }
-
-.pitch-container {
-    background: #15803d; border: 2px solid #fff; border-radius: 6px;
-    height: 120px; position: relative; margin-top: 6px; overflow: hidden;
-}
-.pitch-center-line { position: absolute; top: 50%; width: 100%; height: 1px; background: rgba(255, 255, 255, 0.5); }
-.heatmap-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); height: 100%; width: 100%; position: absolute; top: 0; left: 0; }
-.heatmap-cell { width: 100%; height: 100%; }
-
-.detailed-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px; }
-.stat-box { background: var(--bg-main); padding: 8px; border-radius: 8px; text-align: center; border: 1px solid var(--border-color); }
-.stat-val { display: block; font-size: 1.15rem; font-weight: bold; color: var(--accent-blue); }
-.stat-lbl { font-size: 0.72rem; color: var(--text-secondary); }
-
-@media (min-width: 640px) {
-    .search-form { flex-direction: row; }
-    .search-form select { flex: 2; }
-    .search-form button { flex: 1; }
-    .players-grid { grid-template-columns: repeat(2, 1fr); }
-    .modal-body-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
-    .grid-full { grid-column: 1 / -1; }
-}
-
-@media (min-width: 1024px) {
-    .players-grid { grid-template-columns: repeat(3, 1fr); }
-}
+.hidden { display: none; }
