@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Футбольний Психопат — Аналітика UEFA</title>
+    <title>Футбольний Психопат — Аналітика</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/app.js" defer></script>
 </head>
@@ -11,105 +11,119 @@
 
     <div class="app-wrapper">
         <header class="main-header">
-            <div class="header-top">
-                <h1>⚽ Футбольний Психопат</h1>
-                <select id="lang-select" class="lang-select">
-                    <option value="uk" selected>🇺🇦 UA</option>
-                    <option value="en">🇬🇧 EN</option>
-                    <option value="cs">🇨🇿 CZ</option>
-                    <option value="ru">🇷🇺 RU</option>
-                </select>
-            </div>
-            <p>Аналітика всіх клубів вищих ліг UEFA, тренерських штабів та гравців</p>
+            <h1>⚽ Футбольний Психопат</h1>
+            <p>Тактичний та статистичний аналіз клубів</p>
         </header>
 
-        <main class="main-content">
-            <!-- БЛОК ПОШУКУ ТА КРАЇН UEFA -->
-            <section class="search-card">
-                <h3>🇪🇺 Вибір країни та клубу вищої ліги</h3>
-                <div class="search-form">
+        <!-- 1. ВИБІР КРАЇНИ ТА КЛУБУ -->
+        <section class="card search-card">
+            <h2>🌍 Вибір команди</h2>
+            <div class="search-form">
+                <div class="field-group">
+                    <label for="country-select">Країна</label>
                     <select id="country-select"></select>
+                </div>
+                <div class="field-group">
+                    <label for="club-select">Клуб</label>
                     <select id="club-select"></select>
-                    <button type="button" id="search-btn" class="btn-primary">Аналізувати</button>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- КАРТКА КЛУБУ ТА ТРЕНЕРСЬКОГО ШТАБУ -->
-            <section class="club-card">
-                <div class="club-header-info">
-                    <div>
-                        <h2 id="club-title">-</h2>
-                        <p class="coach-text">👨‍💼 <span data-i18n="lbl_coach">Головний тренер:</span> <strong id="club-coach">-</strong></p>
-                        <p class="staff-text">📋 <span data-i18n="lbl_staff">Штаб:</span> <span id="club-staff">-</span></p>
-                    </div>
-                    <span id="club-country-badge" class="country-badge">-</span>
-                </div>
-            </section>
-
-            <!-- ОСТАННІ МАТЧІ -->
-            <section class="matches-section">
-                <h3 data-i18n="lbl_last_matches">📊 Останні матчі команди</h3>
-                <div id="matches-list" class="matches-grid"></div>
-            </section>
-
-            <!-- ПОВНИЙ СКЛАД ГРАВЦІВ -->
-            <section class="squad-section">
-                <h3 data-i18n="squad">Повний склад гравців та статистика</h3>
-                <div id="players-list" class="players-grid"></div>
-            </section>
-        </main>
-    </div>
-
-    <!-- АДАПТИВНЕ МОДАЛЬНЕ ВІКНО СТАТИСТИКИ ГРАВЦЯ -->
-    <div id="player-modal" class="modal hidden" role="dialog" aria-modal="true">
-        <div class="modal-content">
-            <div class="modal-sticky-header">
+        <!-- ІНФОРМАЦІЯ ПРО КЛУБ ТА ЛІГУ -->
+        <section class="card club-info-card">
+            <div class="club-header">
                 <div>
-                    <h2 id="modal-player-name">Ім'я Гравця</h2>
-                    <span id="modal-player-status" class="status-pill starter">Основа</span>
+                    <h2 id="club-name">-</h2>
+                    <p class="league-details" id="club-league-info">-</p>
                 </div>
-                <button type="button" id="close-modal-btn" class="close-modal" aria-label="Close">&times;</button>
+                <div class="rank-badge" id="club-rank">-</div>
+            </div>
+        </section>
+
+        <!-- 2. ТРЕНЕРСЬКИЙ ШТАБ ТА ПОТОЧНА СХЕМА -->
+        <section class="card staff-card">
+            <h2>👨‍💼 Тренерський штаб та Поточна схема</h2>
+            <div class="staff-details">
+                <p><strong>Головний тренер:</strong> <span id="coach-name">-</span></p>
+                <p><strong>Штаб:</strong> <span id="staff-members">-</span></p>
+                <p><strong>Поточна тактична схема:</strong> <span id="current-formation-title" class="highlight-text">-</span></p>
             </div>
             
-            <div class="modal-body-grid">
-                <div class="info-block">
-                    <div><strong>Позиція:</strong> <span id="modal-player-pos">-</span></div>
-                    <div><strong>Робоча нога:</strong> <span id="modal-player-foot">-</span></div>
-                    <div><strong>Витривалість:</strong> <span id="modal-player-stamina">-</span></div>
+            <div class="pitch-section">
+                <h3>Розташування гравців на полі</h3>
+                <div class="soccer-pitch" id="current-pitch">
+                    <div class="pitch-line center-circle"></div>
+                    <div class="pitch-line penalty-area-top"></div>
+                    <div class="pitch-line penalty-area-bottom"></div>
+                    <div id="current-pitch-players"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. СПИСОК ГРАВЦІВ -->
+        <section class="card squad-card">
+            <h2>👥 Склад команди (Натисніть на гравця для аналітики)</h2>
+            <div class="players-list" id="players-list"></div>
+        </section>
+
+        <!-- 4. ОСТАННІ 10 МАТЧІВ ТА СТАТИСТИКА -->
+        <section class="card matches-card">
+            <h2>📊 Останні 10 матчів та детальна статистика</h2>
+            <div class="matches-grid" id="matches-grid"></div>
+            
+            <div id="selected-match-stats" class="match-stats-panel hidden">
+                <h3 id="match-stats-title">Статистика матчу</h3>
+                <div class="stats-bars-grid" id="match-stats-bars"></div>
+            </div>
+        </section>
+
+        <!-- 5. ТАКТИЧНА ПРОПОЗИЦІЯ ТА ОПТИМАЛЬНА СХЕМА -->
+        <section class="card suggestion-card">
+            <h2>💡 Рекомендована тактика від аналітика</h2>
+            <p id="tactical-reasoning" class="tactical-desc">-</p>
+
+            <div class="pitch-section">
+                <h3>Оптимальне розташування складiв під нову схему (<span id="recommended-formation-title">-</span>)</h3>
+                <div class="soccer-pitch recommended-pitch" id="recommended-pitch">
+                    <div class="pitch-line center-circle"></div>
+                    <div class="pitch-line penalty-area-top"></div>
+                    <div class="pitch-line penalty-area-bottom"></div>
+                    <div id="recommended-pitch-players"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- МОДАЛЬНЕ ВІКНО АНАЛІТИКИ ГРАВЦЯ -->
+    <div id="player-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <span id="m-player-number" class="player-number-badge">#0</span>
+                    <h2 id="m-player-name">Ім'я Прізвище</h2>
+                </div>
+                <button type="button" id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info-row">
+                    <span><strong>Позиція:</strong> <span id="m-player-pos">-</span></span>
+                    <span><strong>Робоча нога:</strong> <span id="m-player-foot">-</span></span>
+                </div>
+                
+                <div class="analysis-box text-green">
+                    <h4>💪 Сильні сторони</h4>
+                    <p id="m-player-strengths">-</p>
                 </div>
 
-                <div class="traits-block">
-                    <h4 class="text-green">💪 Сильні сторони</h4>
-                    <p id="modal-player-strengths">-</p>
-                    <h4 class="text-red">⚠️ Слабкі сторони</h4>
-                    <p id="modal-player-weaknesses">-</p>
+                <div class="analysis-box text-red">
+                    <h4>⚠️ Слабкі сторони</h4>
+                    <p id="m-player-weaknesses">-</p>
                 </div>
 
-                <div class="tactical-block grid-full">
-                    <h4 class="text-yellow">📋 Тактичний профіль</h4>
-                    <div class="tactical-details-card">
-                        <p><strong>🎯 Роль:</strong> <span id="m-tac-role">-</span></p>
-                        <p><strong>📍 Зона:</strong> <span id="m-tac-zone">-</span></p>
-                        <p><strong>🛡️ Пресинг:</strong> <span id="m-tac-def">-</span></p>
-                        <p><strong>🏃‍♂️ Обсяг роботи:</strong> <span id="m-tac-workrate">-</span></p>
-                    </div>
-                </div>
-
-                <div class="heatmap-block grid-full">
-                    <h4 class="text-yellow">🔥 Теплова карта (Heatmap)</h4>
-                    <div class="pitch-container">
-                        <div class="pitch-center-line"></div>
-                        <div id="heatmap-grid" class="heatmap-grid"></div>
-                    </div>
-                </div>
-
-                <div class="stats-block grid-full">
-                    <h4 class="text-green">📈 Повна статистика сезону</h4>
-                    <div class="detailed-stats-grid">
-                        <div class="stat-box"><span class="stat-val" id="m-goals">0</span><span class="stat-lbl">Голи</span></div>
-                        <div class="stat-box"><span class="stat-val" id="m-assists">0</span><span class="stat-lbl">Асисти</span></div>
-                        <div class="stat-box"><span class="stat-val" id="m-rating">0.0</span><span class="stat-lbl">Рейтинг</span></div>
-                    </div>
+                <div class="analysis-box text-blue">
+                    <h4>🎯 Роль та тактичні особливості</h4>
+                    <p id="m-player-role">-</p>
                 </div>
             </div>
         </div>
