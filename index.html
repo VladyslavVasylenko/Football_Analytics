@@ -24,7 +24,7 @@
                     <select id="country-select"></select>
                 </div>
                 <div class="field-group">
-                    <label for="club-select">Клуб</label>
+                    <label for="club-select">Клуб вищої ліги</label>
                     <select id="club-select"></select>
                 </div>
             </div>
@@ -52,7 +52,7 @@
             
             <div class="pitch-section">
                 <h3>Розташування гравців на полі</h3>
-                <div class="soccer-pitch" id="current-pitch">
+                <div class="soccer-pitch">
                     <div class="pitch-line center-circle"></div>
                     <div class="pitch-line penalty-area-top"></div>
                     <div class="pitch-line penalty-area-bottom"></div>
@@ -61,10 +61,17 @@
             </div>
         </section>
 
-        <!-- 3. СПИСОК ГРАВЦІВ -->
+        <!-- 3. СПИСОК ГРАВЦІВ (ЗГОРТАЛЬНИЙ БЛОК) -->
         <section class="card squad-card">
-            <h2>👥 Склад команди (Натисніть на гравця для аналітики)</h2>
-            <div class="players-list" id="players-list"></div>
+            <div class="squad-header-toggle" id="toggle-squad-btn">
+                <h2>👥 Склад команди (<span id="squad-count">0</span>)</h2>
+                <span id="toggle-squad-icon" class="toggle-icon">▼</span>
+            </div>
+            <p class="squad-hint">Натисніть на блок, щоб розгорнути/згорнути список</p>
+            
+            <div class="squad-container hidden" id="squad-container">
+                <div class="players-list" id="players-list"></div>
+            </div>
         </section>
 
         <!-- 4. ОСТАННІ 10 МАТЧІВ ТА СТАТИСТИКА -->
@@ -84,8 +91,8 @@
             <p id="tactical-reasoning" class="tactical-desc">-</p>
 
             <div class="pitch-section">
-                <h3>Оптимальне розташування складiв під нову схему (<span id="recommended-formation-title">-</span>)</h3>
-                <div class="soccer-pitch recommended-pitch" id="recommended-pitch">
+                <h3>Оптимальне розташування під нову схему (<span id="recommended-formation-title">-</span>)</h3>
+                <div class="soccer-pitch recommended-pitch">
                     <div class="pitch-line center-circle"></div>
                     <div class="pitch-line penalty-area-top"></div>
                     <div class="pitch-line penalty-area-bottom"></div>
