@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Футбольний Психопат — Аналітика</title>
+    <title>Футбольний Психопат — Аналітика UEFA</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/app.js" defer></script>
 </head>
@@ -13,51 +13,60 @@
         <header class="main-header">
             <div class="header-top">
                 <h1 data-i18n="title">⚽ Футбольний Психопат</h1>
-                <select id="lang-select" class="lang-select" aria-label="Мова">
+                <select id="lang-select" class="lang-select">
                     <option value="uk" selected>🇺🇦 UA</option>
                     <option value="en">🇬🇧 EN</option>
                     <option value="cs">🇨🇿 CZ</option>
                     <option value="ru">🇷🇺 RU</option>
                 </select>
             </div>
-            <p data-i18n="subtitle">Тактичні профілі та детальна статистика гравців</p>
+            <p data-i18n="subtitle">Аналітика клубів UEFA та детальна статистика гравців</p>
         </header>
 
         <main class="main-content">
-            <!-- БЛОК ПОШУКУ -->
+            <!-- БЛОК ПОШУКУ ТА КРАЇН UEFA -->
             <section class="search-card">
-                <h3 data-i18n="search_title">🔍 Вибір клубу для аналітики</h3>
+                <h3 data-i18n="search_title">🇪🇺 Вибір клубу UEFA</h3>
                 <div class="search-form">
-                    <input type="text" id="club-input" placeholder="Назва клубу" value="Динамо Київ">
                     <select id="country-select">
-                        <option value="🇺🇦 Україна (УПЛ)" selected>🇺🇦 Україна</option>
-                        <option value="🇬🇧 Англія (Premier League)">🇬🇧 Англія</option>
-                        <option value="🇪🇸 Іспанія (La Liga)">🇪🇸 Іспанія</option>
-                        <option value="🇨🇿 Чехія (Chance Liga)">🇨🇿 Чехія</option>
-                        <option value="🇩🇪 Німеччина (Bundesliga)">🇩🇪 Німеччина</option>
+                        <!-- Заповнюється динамічно всіма 54 країнами УЄФА -->
                     </select>
-                    <button type="button" id="search-btn" class="btn-primary" data-i18n="btn_search">Завантажити</button>
+                    <select id="club-select">
+                        <!-- Динамічно заповнюється клубами вибраної країни -->
+                    </select>
+                    <button type="button" id="search-btn" class="btn-primary" data-i18n="btn_search">Аналізувати</button>
                 </div>
             </section>
 
-            <!-- КАРТКА ПОТОЧНОГО КЛУБУ -->
+            <!-- КАРТКА КЛУБУ -->
             <section class="club-card">
-                <h2 id="club-title">ФК Динамо Київ</h2>
-                <span id="club-country-badge" class="country-badge">🇺🇦 Україна (УПЛ)</span>
+                <div class="club-header-info">
+                    <div>
+                        <h2 id="club-title">-</h2>
+                        <p class="coach-text">👨‍💼 <span data-i18n="lbl_coach">Головний тренер:</span> <strong id="club-coach">-</strong></p>
+                    </div>
+                    <span id="club-country-badge" class="country-badge">-</span>
+                </div>
             </section>
 
-            <!-- СПИСОК ГРАВЦІВ -->
+            <!-- ОСТАННІ 10 МАТЧІВ -->
+            <section class="matches-section">
+                <h3 data-i18n="lbl_last_matches">📊 Останні 10 матчів</h3>
+                <div id="matches-list" class="matches-grid"></div>
+            </section>
+
+            <!-- СПИСОК ГРАВЦІВ ІЗ КЛЮЧОВОЮ СТАТИСТИКОЮ -->
             <section class="squad-section">
-                <h2 data-i18n="squad">Склад команди</h2>
+                <h3 data-i18n="squad">Склад та статистика гравців</h3>
                 <div id="players-list" class="players-grid"></div>
             </section>
         </main>
     </div>
 
-    <!-- МОДАЛЬНЕ ВІКНО -->
-    <div id="player-modal" class="modal hidden" role="dialog" aria-hidden="true">
+    <!-- МОДАЛЬНЕ ВІКНО ПОВНОЇ СТАТИСТИКИ ГРАВЦЯ -->
+    <div id="player-modal" class="modal hidden" role="dialog">
         <div class="modal-content">
-            <button type="button" id="close-modal-btn" class="close-modal" aria-label="Закрити">&times;</button>
+            <button type="button" id="close-modal-btn" class="close-modal">&times;</button>
             
             <div class="modal-header">
                 <h2 id="modal-player-name">Ім'я Гравця</h2>
@@ -79,7 +88,7 @@
                 </div>
 
                 <div class="tactical-block grid-full">
-                    <h4 class="text-yellow" data-i18n="lbl_tactics_title">📋 Тактична роль та зона</h4>
+                    <h4 class="text-yellow" data-i18n="lbl_tactics_title">📋 Тактичний профіль</h4>
                     <div class="tactical-details-card">
                         <p><strong data-i18n="lbl_role">🎯 Роль:</strong> <span id="m-tac-role">-</span></p>
                         <p><strong data-i18n="lbl_zone">📍 Зона:</strong> <span id="m-tac-zone">-</span></p>
@@ -89,7 +98,7 @@
                 </div>
 
                 <div class="heatmap-block grid-full">
-                    <h4 class="text-yellow" data-i18n="lbl_heatmap">🔥 Зони активності (Heatmap)</h4>
+                    <h4 class="text-yellow" data-i18n="lbl_heatmap">🔥 Теплова карта (Heatmap)</h4>
                     <div class="pitch-container">
                         <div class="pitch-center-line"></div>
                         <div id="heatmap-grid" class="heatmap-grid"></div>
@@ -97,7 +106,7 @@
                 </div>
 
                 <div class="stats-block grid-full">
-                    <h4 class="text-green" data-i18n="lbl_stats">📈 Статистика</h4>
+                    <h4 class="text-green" data-i18n="lbl_stats">📈 Повна статистика в єврокубках/лізі</h4>
                     <div class="detailed-stats-grid">
                         <div class="stat-box"><span class="stat-val" id="m-goals">0</span><span class="stat-lbl" data-i18n="st_goals">Голи</span></div>
                         <div class="stat-box"><span class="stat-val" id="m-assists">0</span><span class="stat-lbl" data-i18n="st_assists">Асисти</span></div>
