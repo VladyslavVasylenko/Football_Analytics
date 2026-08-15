@@ -1,4 +1,4 @@
-/* ЄДИНИЙ ШРИФТ ДЛЯ ВСЬОГО ПРОЄКТУ */
+/* ЄДИНИЙ СТАНДАРТНИЙ ШРИФТ ДЛЯ ВСЬОГО ПРОЄКТУ */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -36,26 +36,29 @@ body {
     gap: 16px;
 }
 
-.main-header h1 { font-size: 1.5rem; font-weight: 800; }
+.main-header h1 { font-size: 1.4rem; font-weight: 800; }
 .main-header p { font-size: 0.85rem; color: var(--text-sub); }
 
 .card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 16px;
+    padding: 14px;
 }
 
 .card h2 {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    margin-bottom: 12px;
+}
+
+.search-card h2, .staff-card h2, .matches-card h2, .suggestion-card h2 {
     border-bottom: 1px solid var(--border);
     padding-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .card h3 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
     margin: 10px 0;
 }
@@ -64,7 +67,7 @@ body {
 .search-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
 }
 
 .field-group { display: flex; flex-direction: column; gap: 4px; }
@@ -78,25 +81,26 @@ select {
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 0 10px;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     outline: none;
 }
 
 /* ІНФО ПРО КЛУБ */
 .club-header { display: flex; justify-content: space-between; align-items: center; }
-.club-header h2 { border: none; padding: 0; margin: 0; font-size: 1.3rem; }
-.league-details { font-size: 0.85rem; color: var(--text-sub); margin-top: 4px; }
+.club-header h2 { font-size: 1.25rem; margin: 0; }
+.league-details { font-size: 0.825rem; color: var(--text-sub); margin-top: 4px; }
 .rank-badge {
     background: var(--accent);
     color: #fff;
     padding: 6px 12px;
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: 0.825rem;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .highlight-text { color: var(--accent); font-weight: 700; }
-.staff-details p { margin-bottom: 6px; font-size: 0.9rem; }
+.staff-details p { margin-bottom: 6px; font-size: 0.88rem; }
 
 /* ФУТБОЛЬНЕ ПОЛЕ ТА РОЗТАШУВАННЯ */
 .soccer-pitch {
@@ -124,13 +128,14 @@ select {
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+    z-index: 5;
 }
 
 .player-dot {
-    width: 26px; height: 26px;
+    width: 24px; height: 24px;
     background: #ffffff;
     color: #000;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 800;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -138,16 +143,44 @@ select {
 }
 
 .player-name-tag {
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.85);
     color: #fff;
     font-size: 0.65rem;
-    padding: 1px 4px;
+    padding: 2px 5px;
     border-radius: 4px;
     margin-top: 2px;
     white-space: nowrap;
 }
 
-/* СПИСОК ГРАВЦІВ */
+/* ЗГОРТАЛЬНИЙ СПИСОК ГРАВЦІВ */
+.squad-header-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding-bottom: 4px;
+}
+
+.toggle-icon {
+    font-size: 1.1rem;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+}
+
+.toggle-icon.open {
+    transform: rotate(180deg);
+}
+
+.squad-hint {
+    font-size: 0.75rem;
+    color: var(--text-sub);
+    margin-bottom: 8px;
+}
+
+.squad-container {
+    margin-top: 10px;
+}
+
 .players-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -164,11 +197,11 @@ select {
     align-items: center;
     cursor: pointer;
 }
-.player-item:hover { border-color: var(--accent); }
+.player-item:active { border-color: var(--accent); }
 .player-item-left { display: flex; align-items: center; gap: 8px; }
-.player-num { font-weight: 800; color: var(--accent); font-size: 0.9rem; }
+.player-num { font-weight: 800; color: var(--accent); font-size: 0.88rem; width: 22px; }
 .player-fullname { font-size: 0.85rem; font-weight: 600; }
-.player-pos-badge { font-size: 0.7rem; color: var(--text-sub); }
+.player-pos-badge { font-size: 0.72rem; color: var(--text-sub); }
 
 /* ОСТАННІ 10 МАТЧІВ */
 .matches-grid {
@@ -179,7 +212,7 @@ select {
 }
 
 .match-card {
-    min-width: 100px;
+    min-width: 105px;
     background: var(--bg-inner);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -188,10 +221,10 @@ select {
     cursor: pointer;
     flex-shrink: 0;
 }
-.match-card.active { border-color: var(--accent); background: rgba(59, 130, 246, 0.1); }
+.match-card.active { border-color: var(--accent); background: rgba(59, 130, 246, 0.15); }
 
 .match-res-tag {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 800;
     padding: 2px 6px;
     border-radius: 4px;
@@ -201,7 +234,7 @@ select {
 .res-draw { background: rgba(234, 179, 8, 0.2); color: #eab308; }
 .res-loss { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
 
-.match-vs { font-size: 0.75rem; color: var(--text-sub); margin: 4px 0; }
+.match-vs { font-size: 0.75rem; color: var(--text-sub); margin: 4px 0; white-space: nowrap; }
 .match-score-val { font-size: 0.9rem; font-weight: 700; }
 
 .match-stats-panel {
@@ -222,7 +255,7 @@ select {
 .stat-row {
     display: flex;
     justify-content: space-between;
-    font-size: 0.8rem;
+    font-size: 0.825rem;
     border-bottom: 1px solid rgba(255,255,255,0.05);
     padding-bottom: 4px;
 }
@@ -233,23 +266,22 @@ select {
 /* МОДАЛЬНЕ ВІКНО */
 .modal {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.82);
     display: flex; align-items: center; justify-content: center;
     z-index: 1000; padding: 12px;
 }
-.modal.hidden { display: none !important; }
 
 .modal-content {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 12px;
-    width: 100%; max-width: 500px;
+    width: 100%; max-width: 480px;
     padding: 16px;
 }
 
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .player-number-badge { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
-.modal-header h2 { border: none; padding: 0; margin: 0; font-size: 1.2rem; }
+.modal-header h2 { font-size: 1.15rem; margin: 0; }
 
 .close-btn {
     background: none; border: none; color: var(--text-main); font-size: 1.6rem; cursor: pointer;
@@ -270,4 +302,8 @@ select {
 .text-red h4 { color: var(--accent-red); }
 .text-blue h4 { color: var(--accent); }
 
-.hidden { display: none; }
+.hidden { display: none !important; }
+
+@media (max-width: 480px) {
+    .search-form { grid-template-columns: 1fr; }
+}
