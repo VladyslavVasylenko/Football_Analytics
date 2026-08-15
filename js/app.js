@@ -60,38 +60,20 @@ const uefaCountries = [
 ];
 
 // ==========================================
-// 2. ДЕТАЛІЗОВАНІ КЛУБИ ТА РЕАЛЬНІ СКАДИ
+// 2. БАЗОВІ РЕАЛЬНІ КЛУБИ ДЛЯ ДЕЯКИХ ЛІГ
 // ==========================================
-const clubsData = {
+const baseRealClubs = {
+    ENG: [
+        { id: "mancity", name: "Манчестер Сіті", rank: 1, coach: "Пеп Гвардіола", staff: "Хуанма Лілльо", formation: "4-1-4-1" },
+        { id: "arsenal", name: "Арсенал Лондон", rank: 2, coach: "Мікель Артета", staff: "Альберт Стейвенберг", formation: "4-3-3" },
+        { id: "liverpool", name: "Ліверпуль", rank: 3, coach: "Арне Слот", staff: "Сипке Хулсхофф", formation: "4-2-3-1" },
+        { id: "chelsea", name: "Челсі", rank: 4, coach: "Енцо Мареска", staff: "Віллі Кабальєро", formation: "4-2-3-1" }
+    ],
     UKR: [
-        { 
-            id: "dynamo", name: "Динамо Київ", rank: 1, coach: "Олександр Шовковський", staff: "Еміль Карас, Олег Гусєв", formation: "4-3-3",
-            players: [
-                { number: 1, firstName: "Георгій", lastName: "Бущан", pos: "Воротар", foot: "Права", strengths: "Рефлекси, гра на лінії", weaknesses: "Далекий пас", role: "Основа" },
-                { number: 24, firstName: "Олександр", lastName: "Тимчик", pos: "Правий захисник", foot: "Права", strengths: "Швидкість, витривалість", weaknesses: "Позиційний захист", role: "Основа" },
-                { number: 4, firstName: "Денис", lastName: "Попов", pos: "Центральний захисник", foot: "Права", strengths: "Боротьба вгорі", weaknesses: "Агресія, картки", role: "Основа" },
-                { number: 32, firstName: "Тарас", lastName: "Михавко", pos: "Центральний захисник", foot: "Ліва", strengths: "Перший пас", weaknesses: "Фізична дуель", role: "Основа" },
-                { number: 44, firstName: "Владислав", lastName: "Дубінчак", pos: "Лівий захисник", foot: "Ліва", strengths: "Кроси, підключення", weaknesses: "Зона за спиною", role: "Основа" },
-                { number: 6, firstName: "Володимир", lastName: "Бражко", pos: "Опорний півзахисник", foot: "Права", strengths: "Дальній удар, відбір", weaknesses: "Мобільність", role: "Основа" },
-                { number: 10, firstName: "Микола", lastName: "Шапаренко", pos: "Центральний півзахисник", foot: "Права", strengths: "Дриблінг, бачення поля", weaknesses: "Захисні дії", role: "Основа" },
-                { number: 29, firstName: "Віталій", lastName: "Буяльський", pos: "Атакувальний півзахисник", foot: "Права", strengths: "Вривання у штрафний", weaknesses: "Силова боротьба", role: "Основа" },
-                { number: 20, firstName: "Олександр", lastName: "Караваєв", pos: "Правий вінгер", foot: "Права", strengths: "Завершення атак", weaknesses: "Захист 1-в-1", role: "Основа" },
-                { number: 11, firstName: "Владислав", lastName: "Ванат", pos: "Центрфорвард", foot: "Ліва", strengths: "Швидкісні ривки", weaknesses: "Гра головою", role: "Основа" },
-                { number: 9, firstName: "Назар", lastName: "Волошин", pos: "Лівий вінгер", foot: "Права", strengths: "Вибуховий дриблінг", weaknesses: "Прийняття рішень", role: "Основа" },
-                { number: 7, firstName: "Андрій", lastName: "Ярмоленко", pos: "Правий вінгер", foot: "Ліва", strengths: "Досвід, техніка", weaknesses: "Швидкість", role: "Заміна" },
-                { number: 18, firstName: "Олександр", lastName: "Піхальонок", pos: "Центральний півзахисник", foot: "Ліва", strengths: "Розрізні паси", weaknesses: "Відбір", role: "Заміна" }
-            ]
-        },
+        { id: "dynamo", name: "Динамо Київ", rank: 1, coach: "Олександр Шовковський", staff: "Олег Гусєв", formation: "4-3-3" },
         { id: "shakhtar", name: "Шахтар Донецьк", rank: 2, coach: "Маріно Пушич", staff: "Маріо Станич", formation: "4-2-3-1" },
         { id: "polissya", name: "Полісся Житомир", rank: 3, coach: "Імад Ашур", staff: "Сергій Шищенко", formation: "4-3-3" },
-        { id: "oleksandriya", name: "Олександрія", rank: 4, coach: "Руслан Ротань", staff: "Олексій Антонов", formation: "4-3-3" },
-        { id: "rukh", name: "Рух Львів", rank: 5, coach: "Віталій Пономарьов", staff: "Геннадій Щекотилін", formation: "4-3-3" },
-        { id: "kryvbas", name: "Кривбас Кривий Ріг", rank: 6, coach: "Юрій Вернидуб", staff: "Дмитро Кара-Мустафа", formation: "4-2-3-1" }
-    ],
-    ENG: [
-        { id: "mancity", name: "Манчестер Сіті", rank: 1, coach: "Хосеп Гвардіола", staff: "Хуанма Лілльо", formation: "4-1-4-1" },
-        { id: "arsenal", name: "Арсенал", rank: 2, coach: "Мікель Артета", staff: "Альберт Стейвенберг", formation: "4-3-3" },
-        { id: "liverpool", name: "Ліверпуль", rank: 3, coach: "Арне Слот", staff: "Сипке Хулсхофф", formation: "4-2-3-1" }
+        { id: "oleksandriya", name: "Олександрія", rank: 4, coach: "Руслан Ротань", staff: "Олексій Антонов", formation: "4-3-3" }
     ],
     CZE: [
         { id: "sparta", name: "Спарта Прага", rank: 1, coach: "Ларс Фрііс", staff: "Йенс Аскоу", formation: "3-4-3" },
@@ -101,9 +83,9 @@ const clubsData = {
 };
 
 // ==========================================
-// 3. АВТОМАТИЧНИЙ ГЕНЕРАТОР УНІКАЛЬНИХ СКЛАДІВ ДЛЯ БУДЬ-ЯКОГО КЛУБУ
+// 3. ДИНАМІЧНИЙ ГЕНЕРАТОР ГРАВЦІВ ТА КЛУБІВ
 // ==========================================
-const positionsTemplate = [
+const posList = [
     { pos: "Воротар", role: "Основа", num: 1 },
     { pos: "Правий захисник", role: "Основа", num: 2 },
     { pos: "Центральний захисник", role: "Основа", num: 4 },
@@ -116,64 +98,69 @@ const positionsTemplate = [
     { pos: "Центрфорвард", role: "Основа", num: 9 },
     { pos: "Лівий вінгер", role: "Основа", num: 11 },
     { pos: "Воротар", role: "Заміна", num: 12 },
-    { pos: "Центральний захисник", role: "Заміна", num: 15 },
-    { pos: "Центральний півзахисник", role: "Заміна", num: 18 },
-    { pos: "Нападник", role: "Заміна", num: 21 }
+    { pos: "Захисник", role: "Заміна", num: 14 },
+    { pos: "Півзахисник", role: "Заміна", num: 17 },
+    { pos: "Нападник", role: "Заміна", num: 20 }
 ];
 
-const namePrefixes = ["A.", "M.", "D.", "J.", "K.", "S.", "L.", "P.", "R.", "T.", "V.", "H.", "B.", "C."];
+// Генератор УНІКАЛЬНИХ гравців під конкретний клуб
+function generateUniquePlayers(clubName, countryCode) {
+    const surnames = {
+        ENG: ["Smith", "Johnson", "Williams", "Brown", "Jones", "Walker", "Kane", "Rice", "Sterling", "Palmer", "Foden", "Saka", "Pickford", "Trippier", "Grealish"],
+        UKR: ["Бущан", "Ярмоленко", "Шапаренко", "Ванат", "Михавко", "Попов", "Бражко", "Караваєв", "Дубінчак", "Буяльський", "Волошин", "Нещерет", "Кабаєв", "Піхальонок", "Тимчик"],
+        CZE: ["Souček", "Schick", "Hložek", "Coufal", "Krejčí", "Chytil", "Provod", "Jurásek", "Staněk", "Zima", "Holeš", "Barák", "Lingr", "Vlček", "Chorý"],
+        ESP: ["García", "Rodríguez", "González", "López", "Martínez", "Pérez", "Sánchez", "Torres", "Ruiz", "Pedri", "Gavi", "Yamal", "Morata", "Carvajal", "Olmo"],
+        GER: ["Müller", "Schmidt", "Schneider", "Fischer", "Weber", "Meyer", "Wagner", "Becker", "Neuer", "Kimmich", "Musiala", "Wirtz", "Havertz", "Sané", "Rüdiger"],
+        ITA: ["Rossi", "Russo", "Ferrari", "Esposito", "Bianchi", "Romano", "Colombo", "Ricci", "Barella", "Chiesa", "Bastoni", "Donnarumma", "Pellegrini", "Dimarco", "Scamacca"]
+    };
 
-function generateSquadForClub(clubName, countryCode) {
-    return positionsTemplate.map((item, idx) => {
-        // Унікальна генерація прізвища на основі назви клубу та індексу гравця
-        const seed = clubName.length + countryCode.charCodeAt(0) + idx;
-        const fn = namePrefixes[(seed + idx) % namePrefixes.length];
-        const ln = `${clubName.replace(/[^a-zA-Zа-яА-ЯІіЇїЄє]/g, "")}_Гравець_${idx + 1}`;
-        
+    const list = surnames[countryCode] || [
+        `${countryCode}_PlayerA`, `${countryCode}_PlayerB`, `${countryCode}_PlayerC`, `${countryCode}_PlayerD`,
+        `${countryCode}_PlayerE`, `${countryCode}_PlayerF`, `${countryCode}_PlayerG`, `${countryCode}_PlayerH`,
+        `${countryCode}_PlayerI`, `${countryCode}_PlayerJ`, `${countryCode}_PlayerK`, `${countryCode}_PlayerL`
+    ];
+
+    return posList.map((p, idx) => {
+        const surname = list[idx % list.length] + (countryCode !== 'ENG' && countryCode !== 'ESP' ? '' : '');
         return {
-            number: item.num,
-            firstName: fn,
-            lastName: ln,
-            pos: item.pos,
-            foot: (idx % 3 === 0) ? "Ліва" : "Права",
-            strengths: `Професійна гра на позиції (${item.pos}), фізична витривалість.`,
-            weaknesses: `Потребує ротації у напруженому графіку.`,
-            role: item.role
+            number: p.num,
+            firstName: `Гравець #${p.num}`,
+            lastName: `${surname} (${clubName.substring(0, 3)})`,
+            pos: p.pos,
+            foot: idx % 2 === 0 ? "Права" : "Ліва",
+            strengths: "Контроль м'яча, бачення поля",
+            weaknesses: "Фізична витривалість",
+            role: p.role
         };
     });
 }
 
-// ==========================================
-// 4. ОДЕРЖАННЯ КЛУБІВ ТА ЇХ СКЛАДІВ
-// ==========================================
+// Отримання клубів для країни
 function getClubsForCountry(countryCode) {
-    let list = clubsData[countryCode];
+    let clubs = baseRealClubs[countryCode];
     
-    if (!list || list.length === 0) {
+    if (!clubs || clubs.length === 0) {
         const country = uefaCountries.find(c => c.code === countryCode);
-        const countryName = country ? country.name.split(" ")[1] : "Клуб";
+        const nameClean = country ? country.name.split(" ")[1] : "Клуб";
         
-        list = [
-            { id: `${countryCode.toLowerCase()}_1`, name: `${countryName} Юнайтед`, rank: 1, coach: "Головний тренер", staff: "Асистент", formation: "4-3-3" },
-            { id: `${countryCode.toLowerCase()}_2`, name: `${countryName} Сіті`, rank: 2, coach: "Головний тренер", staff: "Асистент", formation: "4-2-3-1" },
-            { id: `${countryCode.toLowerCase()}_3`, name: `${countryName} Динамо`, rank: 3, coach: "Головний тренер", staff: "Асистент", formation: "3-5-2" },
-            { id: `${countryCode.toLowerCase()}_4`, name: `${countryName} Спартак`, rank: 4, coach: "Головний тренер", staff: "Асистент", formation: "4-4-2" }
+        clubs = [
+            { id: `${countryCode.toLowerCase()}_1`, name: `${nameClean} Юнайтед`, rank: 1, coach: "Головний тренер", staff: "Асистент", formation: "4-3-3" },
+            { id: `${countryCode.toLowerCase()}_2`, name: `${nameClean} Сіті`, rank: 2, coach: "Головний тренер", staff: "Асистент", formation: "4-2-3-1" },
+            { id: `${countryCode.toLowerCase()}_3`, name: `${nameClean} Динамо`, rank: 3, coach: "Головний тренер", staff: "Асистент", formation: "3-5-2" },
+            { id: `${countryCode.toLowerCase()}_4`, name: `${countryName || nameClean} Атлетік`, rank: 4, coach: "Головний тренер", staff: "Асистент", formation: "4-4-2" }
         ];
     }
 
-    // Перевіряємо та генеруємо унікальний склад для кожного клубу, якщо його ще немає
-    return list.map(club => {
-        if (!club.players || club.players.length === 0) {
-            club.players = generateSquadForClub(club.name, countryCode);
-        }
-        return club;
-    });
+    return clubs.map(c => ({
+        ...c,
+        players: generateUniquePlayers(c.name, countryCode)
+    }));
 }
 
 let selectedClubData = null;
 
 // ==========================================
-// 5. ПОДІЇ ТА ВІДОБРАЖЕННЯ
+// 4. ІНІЦІАЛІЗАЦІЯ ТА ПОДІЇ
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     initCountries();
@@ -204,7 +191,7 @@ function initCountries() {
         countrySelect.appendChild(opt);
     });
 
-    loadClubsForCountry("UKR");
+    loadClubsForCountry("ENG"); // Замовчуванням Англія
 }
 
 function loadClubsForCountry(countryCode) {
@@ -232,14 +219,14 @@ function renderClubDashboard(clubId) {
     selectedClubData = generateMatchAndTacticsData(club, list);
 
     document.getElementById("club-name").innerText = selectedClubData.name;
-    document.getElementById("club-league-info").innerText = `Ліга: ${countryObj.leagueName} | Всього команд у лізі: ${countryObj.teamsCount}`;
+    document.getElementById("club-league-info").innerText = `Ліга: ${countryObj.leagueName} | Всього команд: ${countryObj.teamsCount}`;
     document.getElementById("club-rank").innerText = `${selectedClubData.rank}-е місце в таблиці`;
 
     document.getElementById("coach-name").innerText = selectedClubData.coach;
     document.getElementById("staff-members").innerText = selectedClubData.staff;
     document.getElementById("current-formation-title").innerText = selectedClubData.formation;
 
-    // Оновлюємо схему та список гравців САМЕ ДЛЯ ПОТОЧНОГО ОБРАНОГО КЛУБУ
+    // Малюємо гравців Поточного Клубу
     renderPitch("current-pitch-players", selectedClubData.players.slice(0, 11), selectedClubData.formation);
 
     document.getElementById("squad-count").innerText = `${selectedClubData.players.length} гравців`;
@@ -257,21 +244,20 @@ function generateMatchAndTacticsData(club, currentLeagueClubs) {
     
     const matches = Array.from({ length: 10 }).map((_, idx) => {
         const oppName = opponentsPool.length > 0 ? opponentsPool[idx % opponentsPool.length] : "Суперник";
-        const results = ["win", "draw", "loss", "win", "win", "draw", "win", "loss", "win", "draw"];
-        const scores = ["2:1", "1:1", "0:2", "3:0", "1:0", "2:2", "4:1", "1:2", "2:0", "0:0"];
-        const res = results[idx % results.length];
-
+        const results = ["win", "draw", "loss", "win", "win"];
+        const scores = ["2:1", "1:1", "0:2", "3:0", "1:0"];
+        
         return {
             id: idx + 1,
             opponent: oppName,
-            result: res,
+            result: results[idx % results.length],
             score: scores[idx % scores.length],
             stats: {
-                passes: 380 + (idx * 15),
-                shots: 8 + (idx % 8),
-                setPieces: 3 + (idx % 6),
-                tackles: 14 + (idx % 7),
-                fouls: 7 + (idx % 6)
+                passes: 400 + (idx * 10),
+                shots: 10 + (idx % 5),
+                setPieces: 5 + (idx % 3),
+                tackles: 12 + (idx % 4),
+                fouls: 8 + (idx % 3)
             }
         };
     });
@@ -281,7 +267,7 @@ function generateMatchAndTacticsData(club, currentLeagueClubs) {
         matches: matches,
         recommendedTactics: {
             formation: club.formation === "4-3-3" ? "4-2-3-1" : "4-3-3",
-            reasoning: `Аналіз останніх 10 матчів команди ${club.name} показує доцільність оптимізації переходів з оборони в атаку. Рекомендовано схему ${club.formation === "4-3-3" ? "4-2-3-1" : "4-3-3"}.`
+            reasoning: `Рекомендація для ${club.name}: змінити схему на ${club.formation === "4-3-3" ? "4-2-3-1" : "4-3-3"} для покращення контролю центральної зони.`
         }
     };
 }
@@ -289,7 +275,6 @@ function generateMatchAndTacticsData(club, currentLeagueClubs) {
 function toggleSquadBlock() {
     const container = document.getElementById("squad-container");
     const icon = document.getElementById("toggle-squad-icon");
-
     if (container) container.classList.toggle("hidden");
     if (icon) icon.classList.toggle("open");
 }
@@ -410,9 +395,9 @@ function showMatchStats(match, targetCard = null) {
         statsContainer.innerHTML = `
             <div class="stat-row"><span>Передачі (паси):</span><strong>${match.stats.passes}</strong></div>
             <div class="stat-row"><span>Удари по воротах:</span><strong>${match.stats.shots}</strong></div>
-            <div class="stat-row"><span>Стандарти (кутові/штрафні):</span><strong>${match.stats.setPieces}</strong></div>
-            <div class="stat-row"><span>Успішні відбори:</span><strong>${match.stats.tackles}</strong></div>
-            <div class="stat-row"><span>Фоли / Штрафні:</span><strong>${match.stats.fouls}</strong></div>
+            <div class="stat-row"><span>Стандарти:</span><strong>${match.stats.setPieces}</strong></div>
+            <div class="stat-row"><span>Відбори:</span><strong>${match.stats.tackles}</strong></div>
+            <div class="stat-row"><span>Фоли:</span><strong>${match.stats.fouls}</strong></div>
         `;
     }
 }
