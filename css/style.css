@@ -24,7 +24,7 @@ body {
     padding: 12px; font-size: 15px; line-height: 1.4;
 }
 
-.app-wrapper { width: 100%; margin: 0 auto; }
+.app-wrapper { width: 100%; margin: 0 auto; max-width: 1100px; }
 .main-header { margin-bottom: 16px; }
 .header-top { display: flex; justify-content: space-between; align-items: center; }
 .main-header h1 { font-size: 1.25rem; font-weight: 700; }
@@ -59,8 +59,8 @@ body {
     border: 1px solid var(--border-color); margin-bottom: 16px;
 }
 .club-header-info { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-.club-card h2 { font-size: 1.15rem; margin-bottom: 4px; }
-.coach-text { font-size: 0.85rem; color: var(--text-secondary); }
+.club-card h2 { font-size: 1.2rem; margin-bottom: 6px; }
+.coach-text, .staff-text { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px; }
 .country-badge {
     background: rgba(59, 130, 246, 0.18); color: var(--accent-blue);
     padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.78rem;
@@ -74,7 +74,7 @@ body {
     padding-bottom: 6px; scrollbar-width: thin;
 }
 .match-badge {
-    min-width: 95px; background: var(--bg-card);
+    min-width: 100px; background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px; padding: 8px; text-align: center; flex-shrink: 0;
 }
@@ -103,22 +103,36 @@ body {
 .status-pill.starter { background: rgba(34, 197, 94, 0.18); color: var(--accent-green); }
 .status-pill.sub { background: rgba(234, 179, 8, 0.18); color: var(--accent-yellow); }
 
+/* МОДАЛЬНЕ ВІКНО - ВИПРАВЛЕНО НАЛОЖЕННЯ ТА ЗАКРИТТЯ */
 .modal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85); display: flex; align-items: flex-end; z-index: 1000;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center;
+    z-index: 9999; padding: 10px; backdrop-filter: blur(4px);
 }
 .modal.hidden { display: none !important; }
+
 .modal-content {
-    background: var(--bg-card); width: 100%; max-height: 90vh;
-    border-top-left-radius: 16px; border-top-right-radius: 16px;
-    padding: 16px; overflow-y: auto; position: relative; border-top: 1px solid var(--border-color);
+    background: var(--bg-card); width: 100%; max-width: 650px;
+    max-height: 85vh; border-radius: 16px; border: 1px solid var(--border-color);
+    display: flex; flex-direction: column; overflow: hidden;
 }
+
+.modal-sticky-header {
+    position: sticky; top: 0; background: var(--bg-card);
+    padding: 14px 16px; border-bottom: 1px solid var(--border-color);
+    display: flex; justify-content: space-between; align-items: center; z-index: 10;
+}
+
 .close-modal {
-    position: absolute; top: 12px; right: 14px; background: none; border: none;
-    font-size: 1.8rem; color: var(--text-secondary); cursor: pointer;
+    background: var(--bg-main); border: 1px solid var(--border-color);
+    color: var(--text-primary); font-size: 1.5rem; width: 36px; height: 36px;
+    border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
-.modal-header { margin-bottom: 14px; display: flex; align-items: center; gap: 10px; padding-right: 30px; }
-.modal-body-grid { display: flex; flex-direction: column; gap: 12px; }
+
+.modal-body-grid {
+    padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+}
+
 .info-block, .traits-block, .tactical-details-card {
     background: var(--bg-main); padding: 12px; border-radius: 8px;
     border: 1px solid var(--border-color); font-size: 0.88rem; display: flex; flex-direction: column; gap: 6px;
@@ -129,7 +143,7 @@ body {
 
 .pitch-container {
     background: #15803d; border: 2px solid #fff; border-radius: 6px;
-    height: 130px; position: relative; margin-top: 6px; overflow: hidden;
+    height: 120px; position: relative; margin-top: 6px; overflow: hidden;
 }
 .pitch-center-line { position: absolute; top: 50%; width: 100%; height: 1px; background: rgba(255, 255, 255, 0.5); }
 .heatmap-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); height: 100%; width: 100%; position: absolute; top: 0; left: 0; }
@@ -141,19 +155,14 @@ body {
 .stat-lbl { font-size: 0.72rem; color: var(--text-secondary); }
 
 @media (min-width: 640px) {
-    body { padding: 20px; }
-    .app-wrapper { max-width: 800px; }
     .search-form { flex-direction: row; }
     .search-form select { flex: 2; }
     .search-form button { flex: 1; }
     .players-grid { grid-template-columns: repeat(2, 1fr); }
-    .modal { align-items: center; justify-content: center; padding: 20px; }
-    .modal-content { max-width: 620px; border-radius: 16px; border: 1px solid var(--border-color); }
     .modal-body-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
     .grid-full { grid-column: 1 / -1; }
 }
 
 @media (min-width: 1024px) {
-    .app-wrapper { max-width: 1000px; }
     .players-grid { grid-template-columns: repeat(3, 1fr); }
 }
