@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Футбольна Аналітика</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-top">
+            <h1 data-i18n="title">⚽ Футбольна Аналітика</h1>
+            <select id="lang-select" class="lang-select">
+                <option value="uk" selected>🇺🇦 UA</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="cs">🇨🇿 CZ</option>
+                <option value="ru">🇷🇺 RU</option>
+            </select>
+        </div>
+        <p data-i18n="subtitle">Тактичні профілі та детальна статистика гравців</p>
+    </header>
+
+    <main class="container">
+        <section class="players-section">
+            <h2 data-i18n="squad">Склад команди</h2>
+            <div id="players-list" class="players-grid"></div>
+        </section>
+    </main>
+
+    <!-- МОДАЛЬНЕ ВІКНО -->
+    <div id="player-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-modal-btn" class="close-modal">&times;</span>
+            
+            <div class="modal-header">
+                <h2 id="modal-player-name">Ім'я Гравця</h2>
+                <span id="modal-player-status" class="status-pill">Основа</span>
+            </div>
+            
+            <div class="modal-body-grid">
+                <div class="info-block">
+                    <div><strong data-i18n="lbl_pos">Позиція:</strong> <span id="modal-player-pos">-</span></div>
+                    <div><strong data-i18n="lbl_foot">Робоча нога:</strong> <span id="modal-player-foot">-</span></div>
+                    <div><strong data-i18n="lbl_stamina">Витривалість:</strong> <span id="modal-player-stamina">-</span></div>
+                </div>
+
+                <div class="traits-block">
+                    <h4 class="text-green" data-i18n="lbl_strengths">💪 Сильні сторони</h4>
+                    <p id="modal-player-strengths">-</p>
+                    <h4 class="text-red" style="margin-top: 10px;" data-i18n="lbl_weaknesses">⚠️ Слабкі сторони</h4>
+                    <p id="modal-player-weaknesses">-</p>
+                </div>
+
+                <div class="tactical-analysis-block grid-col-full">
+                    <h4 class="text-yellow" style="margin-bottom: 8px;" data-i18n="lbl_tactics_title">📋 Тактична роль та зона ефективності</h4>
+                    <div class="tactical-details-card">
+                        <p><strong data-i18n="lbl_role">🎯 Найкраща роль:</strong> <span id="m-tac-role">-</span></p>
+                        <p><strong data-i18n="lbl_zone">📍 Оптимальна зона:</strong> <span id="m-tac-zone">-</span></p>
+                        <p><strong data-i18n="lbl_def">🛡️ Оборона / Пресинг:</strong> <span id="m-tac-def">-</span></p>
+                        <p><strong data-i18n="lbl_workrate">🏃‍♂️ Обсяг роботи:</strong> <span id="m-tac-workrate" class="highlight-text">-</span></p>
+                    </div>
+                </div>
+
+                <div class="pitch-heatmap-block grid-col-full">
+                    <h4 class="text-yellow" style="margin-bottom: 10px;" data-i18n="lbl_heatmap">🔥 Зони активності на полі (Heatmap)</h4>
+                    <div class="pitch-container">
+                        <div class="pitch-markings">
+                            <div class="pitch-center-line"></div>
+                            <div class="pitch-center-circle"></div>
+                            <div class="pitch-box penalty-top"></div>
+                            <div class="pitch-box penalty-bottom"></div>
+                        </div>
+                        <div id="heatmap-grid" class="heatmap-grid"></div>
+                    </div>
+                </div>
+
+                <div class="stats-block grid-col-full">
+                    <h4 class="text-green" style="margin-bottom: 10px;" data-i18n="lbl_stats">📈 Статистика дій</h4>
+                    <div class="detailed-stats-grid">
+                        <div class="stat-box"><span class="stat-val" id="m-goals">0</span><span class="stat-lbl" data-i18n="st_goals">Голи</span></div>
+                        <div class="stat-box"><span class="stat-val" id="m-assists">0</span><span class="stat-lbl" data-i18n="st_assists">Асисти</span></div>
+                        <div class="stat-box"><span class="stat-val" id="m-rating">0.0</span><span class="stat-lbl" data-i18n="st_rating">Рейтинг</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
