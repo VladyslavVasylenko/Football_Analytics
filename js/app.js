@@ -1,299 +1,1842 @@
-/**
- * Футбольний Психопат — Головний скрипт додатку
- * Повна база даних клубів АПЛ та УПЛ з робочою візуалізацією схем та гравців.
- */
+/* =========================================================
+   app.js — Футбольний Психопат
+   Працює безпосередньо з HTML, наданим користувачем.
 
-const footballData = [
-  {
-    country: "Англія (АПЛ)",
-    teams: [
-      {
-        name: "Арсенал",
-        league: "Англійська Прем'єр-ліга",
-        rank: "1",
-        coach: "Мікель Артета",
-        staff: "Альберт Стеуйтен, Іньякі Канья",
-        formation: "4-3-3",
-        recFormation: "3-2-4-1",
-        tacticalReasoning: "Перехід на гібридну схему з інвертованим фулбеком дозволить створити чисельну перевагу в центрі поля та убезпечити команду від швидких контратак суперника.",
-        squad: [
-          { number: 22, name: "Давід Рая", position: "Воротар", foot: "Права", strengths: ["Гра на виходах", "Точний перший пас", "Реакція"], weaknesses: ["Іноді ризикує під пресингом"], role: "Сучасний воротар-sweeper, що активно бере участь у білдіпі." },
-          { number: 2, name: "Вільям Саліба", position: "Центральний захисник", foot: "Права", strengths: ["Читання гри", "Швидкість", "Спокій під пресингом"], weaknesses: ["Втрата концентрації на старті"], role: "Стовп оборони, що виправляє помилки партнерів за рахунок вибору позиції." },
-          { number: 6, name: "Габріел Магальяйнс", position: "Центральний захисник", foot: "Ліва", strengths: ["Силова боротьба", "Гра головою", "Голи зі стандартів"], weaknesses: ["Іноді надмірно агресивний у відборі"], role: "Ліворукий центрбек, господар другого поверху." },
-          { number: 41, name: "Деклан Райс", position: "Півзахисник", foot: "Права", strengths: ["Відбір м'яча", "Витривалість", "Прориви з глибини"], weaknesses: ["Креатив у фінальній третині"], role: "Серце та баланс центру поля, руйнівник і розігруючий." },
-          { number: 7, name: "Букайо Сака", position: "Вінгер", foot: "Ліва", strengths: ["Дриблінг 1-в-1", "Пресинг", "Прийняття рішень"], weaknesses: ["Ризик перевтоми через календар"], role: "Головний генератор атак правого флангу, майстер створення моментів." }
+   Очікувана структура:
+   /index.html
+   /js/app.js
+   /js/ukraine.js
+
+   ukraine.js:
+   export const ukraineData = { ... };
+   ========================================================= */
+
+(() => {
+    "use strict";
+
+    // ---------------------------------------------------------
+    // DOM
+    // ---------------------------------------------------------
+
+    const $ = (id) => document.getElementById(id);
+
+    const countrySelect = $("country-select");
+    const clubSelect = $("club-select");
+
+    const clubName = $("club-name");
+    const clubLeagueInfo = $("club-league-info");
+    const clubRank = $("club-rank");
+
+    const coachName = $("coach-name");
+    const staffMembers = $("staff-members");
+    const currentFormationTitle = $("current-formation-title");
+
+    const currentPitchPlayers = $("current-pitch-players");
+
+    const squadCount = $("squad-count");
+    const toggleSquadBtn = $("toggle-squad-btn");
+    const toggleSquadIcon = $("toggle-squad-icon");
+    const squadContainer = $("squad-container");
+    const playersList = $("players-list");
+
+    const matchesGrid = $("matches-grid");
+    const selectedMatchStats = $("selected-match-stats");
+    const matchStatsTitle = $("match-stats-title");
+    const matchStatsBars = $("match-stats-bars");
+
+    const tacticalReasoning = $("tactical-reasoning");
+    const recommendedFormationTitle = $("recommended-formation-title");
+    const recommendedPitchPlayers = $("recommended-pitch-players");
+
+    // Modal
+    const playerModal = $("player-modal");
+    const closeModal = $("close-modal");
+
+    const modalPlayerNumber = $("m-player-number");
+    const modalPlayerName = $("m-player-name");
+    const modalPlayerPos = $("m-player-pos");
+    const modalPlayerFoot = $("m-player-foot");
+    const modalPlayerStrengths = $("m-player-strengths");
+    const modalPlayerWeaknesses = $("m-player-weaknesses");
+    const modalPlayerRole = $("m-player-role");
+
+    // ---------------------------------------------------------
+    // STATE
+    // ---------------------------------------------------------
+
+    let ukraineData = null;
+    let clubs = [];
+    let currentClub = null;
+
+    // ---------------------------------------------------------
+    // CONSTANTS
+    // ---------------------------------------------------------
+
+    const POSITION_NAMES = {
+        GK: "Воротар",
+        DF: "Захисник",
+        MF: "Півзахисник",
+        FW: "Нападник"
+    };
+
+    const POSITION_SHORT = {
+        GK: "GK",
+        DF: "DF",
+        MF: "MF",
+        FW: "FW"
+    };
+
+    const FORMATION_LAYOUTS = {
+        "4-4-2": [
+            ["GK", 50, 86],
+            ["DF", 14, 67],
+            ["DF", 37, 72],
+            ["DF", 63, 72],
+            ["DF", 86, 67],
+            ["MF", 14, 48],
+            ["MF", 37, 53],
+            ["MF", 63, 53],
+            ["MF", 86, 48],
+            ["FW", 37, 27],
+            ["FW", 63, 27]
         ],
-        matches: [
-          { opponent: "Манчестер Сіті", score: "2:2", result: "draw" },
-          { opponent: "Тоттенгем", score: "1:0", result: "win" },
-          { opponent: "Астон Вілла", score: "2:0", result: "win" },
-          { opponent: "Брайтон", score: "1:1", result: "draw" },
-          { opponent: "Челсі", score: "1:1", result: "draw" },
-          { opponent: "Ліверпуль", score: "2:2", result: "draw" },
-          { opponent: "Ньюкасл", score: "1:0", result: "win" },
-          { opponent: "Фулгем", score: "3:0", result: "win" },
-          { opponent: "Вест Гем", score: "3:1", result: "win" },
-          { opponent: "Манчестер Юнайтед", score: "2:0", result: "win" }
-        ]
-      },
-      {
-        name: "Манчестер Сіті",
-        league: "Англійська Прем'єр-ліга",
-        rank: "2",
-        coach: "Пеп Гвардіола",
-        staff: "Хуанма Лільо, Брайан Кідд",
-        formation: "4-2-3-1",
-        recFormation: "3-2-4-1",
-        tacticalReasoning: "Максимальне домінування через володіння та високий контрпресинг.",
-        squad: [
-          { number: 9, name: "Ерлінг Голанд", position: "Нападник", foot: "Ліва", strengths: ["Вибухова швидкість", "Могутній удар", "Вибір позиції"], weaknesses: ["Участь у білдіпі в глибині"], role: "Кілер штрафного майданчика, завершувач моментів." },
-          { number: 17, name: "Кевін Де Брюйне", position: "Півзахисник", foot: "Права", strengths: ["Бачення поля", "Філігранні передачі", "Стандарти"], weaknesses: ["Схильність до травм"], role: "Головний архітектор атак та виконавець стандартів." }
+
+        "4-2-3-1": [
+            ["GK", 50, 86],
+            ["DF", 14, 67],
+            ["DF", 37, 72],
+            ["DF", 63, 72],
+            ["DF", 86, 67],
+            ["MF", 37, 55],
+            ["MF", 63, 55],
+            ["MF", 20, 35],
+            ["MF", 50, 31],
+            ["MF", 80, 35],
+            ["FW", 50, 17]
         ],
-        matches: [
-          { opponent: "Арсенал", score: "2:2", result: "draw" },
-          { opponent: "Челсі", score: "2:0", result: "win" },
-          { opponent: "Іпсвіч", score: "4:1", result: "win" },
-          { opponent: "Вест Гем", score: "3:1", result: "win" },
-          { opponent: "Брентфорд", score: "2:1", result: "win" },
-          { opponent: "Ньюкасл", score: "1:1", result: "draw" },
-          { opponent: "Фулгем", score: "3:2", result: "win" },
-          { opponent: "Вовк", score: "2:1", result: "win" },
-          { opponent: "Саутгемптон", score: "1:0", result: "win" },
-          { opponent: "Борнмут", score: "1:2", result: "loss" }
-        ]
-      }
-    ]
-  },
-  {
-    country: "Україна (УПЛ)",
-    teams: [
-      {
-        name: "Динамо Київ",
-        league: "Українська Прем'єр-ліга",
-        rank: "1",
-        coach: "Олександр Шовковський",
-        staff: "Олег Гусєв, Сергій Федоров",
-        formation: "4-2-3-1",
-        recFormation: "4-3-3",
-        tacticalReasoning: "Збільшення кількості півзахисників для кращого контролю темпу в єврокубках.",
-        squad: [
-          { number: 10, name: "Микола Шапаренко", position: "Півзахисник", foot: "Права", strengths: ["Пас", "Бачення поля", "Дальній удар"], weaknesses: ["Нестабільність", "Мікротравми"], role: "Диригент атак та переведення м'яча з оборони в атаку." },
-          { number: 11, name: "Владислав Ванат", position: "Нападник", foot: "Ліва", strengths: ["Тиск на захист", "Швидкі відкривання"], weaknesses: ["Антропометрія у силовій боротьбі"], role: "Швидкий форвард, що пресингує захисників з перших хвилин." }
+
+        "4-3-3": [
+            ["GK", 50, 86],
+            ["DF", 14, 67],
+            ["DF", 37, 72],
+            ["DF", 63, 72],
+            ["DF", 86, 67],
+            ["MF", 27, 52],
+            ["MF", 50, 58],
+            ["MF", 73, 52],
+            ["FW", 18, 27],
+            ["FW", 50, 20],
+            ["FW", 82, 27]
         ],
-        matches: [
-          { opponent: "Шахтар", score: "1:1", result: "draw" },
-          { opponent: "Полісся", score: "2:1", result: "win" },
-          { opponent: "Кривбас", score: "2:0", result: "win" },
-          { opponent: "Карпати", score: "3:1", result: "win" },
-          { opponent: "Зоря", score: "2:0", result: "win" },
-          { opponent: "Рух", score: "0:0", result: "draw" },
-          { opponent: "Олександрія", score: "0:0", result: "draw" },
-          { opponent: "Верес", score: "2:1", result: "win" },
-          { opponent: "Колос", score: "3:0", result: "win" },
-          { opponent: "Оболонь", score: "5:1", result: "win" }
-        ]
-      },
-      {
-        name: "Шахтар Донецьк",
-        league: "Українська Прем'єр-ліга",
-        rank: "2",
-        coach: "Маріно Пушич",
-        staff: "Маріо Станіч, Карло Николіч",
-        formation: "4-3-3",
-        recFormation: "4-2-3-1",
-        tacticalReasoning: "Зміцнення опорної зони двома опорниками проти швидких контратак суперників.",
-        squad: [
-          { number: 8, name: "Георгій Судаков", position: "Півзахисник", foot: "Права", strengths: ["Тонкий пас", "Робота під тиском", "Гострота"], weaknesses: ["Фізична міць у захисті"], role: "Головний креативник та джерело гольових передач." }
+
+        "3-4-3": [
+            ["GK", 50, 86],
+            ["DF", 25, 69],
+            ["DF", 50, 73],
+            ["DF", 75, 69],
+            ["MF", 12, 49],
+            ["MF", 35, 54],
+            ["MF", 65, 54],
+            ["MF", 88, 49],
+            ["FW", 20, 25],
+            ["FW", 50, 18],
+            ["FW", 80, 25]
         ],
-        matches: [
-          { opponent: "Динамо Київ", score: "1:1", result: "draw" },
-          { opponent: "Кривбас", score: "1:0", result: "win" },
-          { opponent: "Полісся", score: "0:1", result: "loss" },
-          { opponent: "ЛНЗ", score: "4:1", result: "win" },
-          { opponent: "Карпати", score: "5:2", result: "win" },
-          { opponent: "Зоря", score: "3:1", result: "win" },
-          { opponent: "Рух", score: "1:1", result: "draw" },
-          { opponent: "Олександрія", score: "0:1", result: "loss" },
-          { opponent: "Чорноморець", score: "2:1", result: "win" },
-          { opponent: "Ворскла", score: "3:0", result: "win" }
+
+        "3-5-2": [
+            ["GK", 50, 86],
+            ["DF", 25, 69],
+            ["DF", 50, 73],
+            ["DF", 75, 69],
+            ["MF", 12, 47],
+            ["MF", 31, 54],
+            ["MF", 50, 45],
+            ["MF", 69, 54],
+            ["MF", 88, 47],
+            ["FW", 38, 22],
+            ["FW", 62, 22]
+        ],
+
+        "4-1-4-1": [
+            ["GK", 50, 86],
+            ["DF", 14, 67],
+            ["DF", 37, 72],
+            ["DF", 63, 72],
+            ["DF", 86, 67],
+            ["MF", 50, 58],
+            ["MF", 14, 38],
+            ["MF", 37, 43],
+            ["MF", 63, 43],
+            ["MF", 86, 38],
+            ["FW", 50, 19]
+        ],
+
+        "4-3-2-1": [
+            ["GK", 50, 86],
+            ["DF", 14, 67],
+            ["DF", 37, 72],
+            ["DF", 63, 72],
+            ["DF", 86, 67],
+            ["MF", 30, 54],
+            ["MF", 50, 59],
+            ["MF", 70, 54],
+            ["MF", 37, 32],
+            ["MF", 63, 32],
+            ["FW", 50, 18]
+        ],
+
+        "5-3-2": [
+            ["GK", 50, 86],
+            ["DF", 8, 63],
+            ["DF", 29, 70],
+            ["DF", 50, 73],
+            ["DF", 71, 70],
+            ["DF", 92, 63],
+            ["MF", 30, 50],
+            ["MF", 50, 55],
+            ["MF", 70, 50],
+            ["FW", 38, 23],
+            ["FW", 62, 23]
         ]
-      }
-    ]
-  }
-];
+    };
 
-// Автоматичне доповнення решти команд АПЛ та УПЛ
-const eplTeamsList = ["Астон Вілла", "Борнмут", "Брентфорд", "Брайтон", "Челсі", "Крістал Пелес", "Евертон", "Фулгем", "Іпсвіч Таун", "Лестер Сіті", "Ліверпуль", "Манчестер Юнайтед", "Ньюкасл", "Ноттінгем Форест", "Саутгемптон", "Тоттенгем", "Вест Гем", "Вулвергемптон"];
-eplTeamsList.forEach((teamName, index) => {
-  footballData[0].teams.push({
-    name: teamName,
-    league: "Англійська Прем'єр-ліга",
-    rank: (index + 3).toString(),
-    coach: "Головний Тренер",
-    staff: "Асистент, Тренер з фд",
-    formation: "4-3-3",
-    recFormation: "4-4-2",
-    tacticalReasoning: "Дисциплінований компактний блок для успішної боротьби за виживання та єврокубки.",
-    squad: [
-      { number: 10, name: `Ключовий гравець ${teamName}`, position: "Півзахисник", foot: "Права", strengths: ["Робоча етика", "Стандарти"], weaknesses: ["Нестабільність"], role: "Лідер центру поля." },
-      { number: 9, name: `Форвард ${teamName}`, position: "Нападник", foot: "Права", strengths: ["Швидкість"], weaknesses: ["Гра в захисті"], role: "Завершувач." }
-    ],
-    matches: Array(10).fill(0).map((_, i) => ({ opponent: `Суперник ${i+1}`, score: "1:1", result: "draw" }))
-  });
-});
+    const DEFAULT_FORMATION = "4-2-3-1";
 
-const uplTeamsList = ["Полісся Житомир", "Кривбас Кривий Ріг", "Карпати Львів", "Олександрія", "Зоря Луганськ", "Рух Львів", "Верес Рівне", "Колос Ковалівка", "Оболонь Київ", "ЛНЗ Черкаси", "Чорноморець Одеса", "Ворскла Полтава", "Лівий Берег Київ", "Інгулець Петрове"];
-uplTeamsList.forEach((teamName, index) => {
-  footballData[1].teams.push({
-    name: teamName,
-    league: "Українська Прем'єр-ліга",
-    rank: (index + 3).toString(),
-    coach: "Український Тренер",
-    staff: "Тренерський штаб клубу",
-    formation: "4-2-3-1",
-    recFormation: "4-3-3",
-    tacticalReasoning: "Вертикальний футбол та агресивний пресинг у зонах підбору.",
-    squad: [
-      { number: 7, name: `Лідер команди ${teamName}`, position: "Вінгер", foot: "Права", strengths: ["Швидкість", "Самовіддача"], weaknesses: ["Захисна робота"], role: "Фланговий забійник." },
-      { number: 1, name: `Воротар ${teamName}`, position: "Воротар", foot: "Права", strengths: ["Реакція"], weaknesses: ["Виходи"], role: "Голкіпер." }
-    ],
-    matches: Array(10).fill(0).map((_, i) => ({ opponent: `Суперник УПЛ ${i+1}`, score: "1:0", result: "win" }))
-  });
-});
+    // ---------------------------------------------------------
+    // HELPERS
+    // ---------------------------------------------------------
 
-document.addEventListener("DOMContentLoaded", () => {
-  const countrySelect = document.getElementById("country-select");
-  const clubSelect = document.getElementById("club-select");
+    function safeText(value, fallback = "—") {
+        if (value === null || value === undefined || value === "") {
+            return fallback;
+        }
 
-  if (!countrySelect || !clubSelect) return;
-
-  footballData.forEach((group, index) => {
-    const option = document.createElement("option");
-    option.value = index;
-    option.textContent = group.country;
-    countrySelect.appendChild(option);
-  });
-
-  function updateClubs() {
-    const countryIndex = countrySelect.value;
-    const teams = footballData[countryIndex].teams;
-    clubSelect.innerHTML = "";
-    teams.forEach((team, index) => {
-      const option = document.createElement("option");
-      option.value = index;
-      option.textContent = team.name;
-      clubSelect.appendChild(option);
-    });
-    updateTeamDetails();
-  }
-
-  function updateTeamDetails() {
-    const countryIndex = countrySelect.value;
-    const teamIndex = clubSelect.value;
-    const team = footballData[countryIndex].teams[teamIndex];
-
-    if (!team) return;
-
-    document.getElementById("club-name").textContent = team.name;
-    document.getElementById("club-league-info").textContent = `${team.league} • Сезон 2026/2027`;
-    document.getElementById("club-rank").textContent = `#${team.rank}`;
-
-    document.getElementById("coach-name").textContent = team.coach;
-    document.getElementById("staff-members").textContent = team.staff;
-    document.getElementById("current-formation-title").textContent = team.formation;
-    document.getElementById("recommended-formation-title").textContent = team.recFormation;
-    document.getElementById("tactical-reasoning").textContent = team.tacticalReasoning;
-
-    renderPitchPlayers("current-pitch-players");
-    renderPitchPlayers("recommended-pitch-players");
-
-    const squadContainer = document.getElementById("players-list");
-    document.getElementById("squad-count").textContent = team.squad.length;
-    squadContainer.innerHTML = "";
-
-    team.squad.forEach(player => {
-      const card = document.createElement("div");
-      card.className = "player-card-mini";
-      card.style.cssText = "background: rgba(255,255,255,0.05); padding: 10px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;";
-      card.innerHTML = `<div><strong>#${player.number}</strong> ${player.name}</div><div style="font-size: 0.85rem; color: #a0aec0;">${player.position}</div>`;
-      
-      card.addEventListener("click", () => openPlayerModal(player));
-      squadContainer.appendChild(card);
-    });
-
-    const matchesGrid = document.getElementById("matches-grid");
-    matchesGrid.innerHTML = "";
-    team.matches.forEach(match => {
-      const matchEl = document.createElement("div");
-      matchEl.className = `match-badge ${match.result}`;
-      matchEl.style.cssText = "padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.08); text-align: center; font-size: 0.9rem;";
-      matchEl.innerHTML = `<div>${match.opponent}</div><strong>${match.score}</strong>`;
-      matchesGrid.appendChild(matchEl);
-    });
-  }
-
-  function renderPitchPlayers(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    container.innerHTML = "";
-    
-    // Генерація 11 фішок гравців на полі
-    for (let i = 0; i < 11; i++) {
-      const dot = document.createElement("div");
-      dot.className = "pitch-player-dot";
-      dot.style.cssText = "width: 24px; height: 24px; background: #3182ce; border: 2px solid #fff; border-radius: 50%; position: absolute; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; font-weight: bold; transform: translate(-50%, -50%);";
-      
-      // Розподіл по лініях (Воротар, Захист, Півзахист, Напад)
-      if (i === 0) {
-        dot.style.bottom = "8%";
-        dot.style.left = "50%";
-      } else if (i <= 4) {
-        dot.style.bottom = "28%";
-        dot.style.left = `${15 + ((i - 1) * 23)}%`;
-      } else if (i <= 8) {
-        dot.style.bottom = "55%";
-        dot.style.left = `${20 + ((i - 5) * 20)}%`;
-      } else {
-        dot.style.bottom = "78%";
-        dot.style.left = `${35 + ((i - 9) * 30)}%`;
-      }
-      
-      dot.textContent = i + 1;
-      container.appendChild(dot);
+        return String(value);
     }
-  }
 
-  function openPlayerModal(player) {
-    document.getElementById("m-player-number").textContent = `#${player.number}`;
-    document.getElementById("m-player-name").textContent = player.name;
-    document.getElementById("m-player-pos").textContent = player.position;
-    document.getElementById("m-player-foot").textContent = player.foot;
-    document.getElementById("m-player-strengths").textContent = player.strengths.join(", ");
-    document.getElementById("m-player-weaknesses").textContent = player.weaknesses.join(", ");
-    document.getElementById("m-player-role").textContent = player.role;
+    function escapeHTML(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
-    document.getElementById("player-modal").classList.remove("hidden");
-  }
+    function normalizeFormation(formation) {
+        if (!formation) {
+            return DEFAULT_FORMATION;
+        }
 
-  const closeModalBtn = document.getElementById("close-modal");
-  if (closeModalBtn) {
-    closeModalBtn.addEventListener("click", () => {
-      document.getElementById("player-modal").classList.add("hidden");
-    });
-  }
+        const value = String(formation).trim();
 
-  const toggleSquadBtn = document.getElementById("toggle-squad-btn");
-  if (toggleSquadBtn) {
-    toggleSquadBtn.addEventListener("click", () => {
-      const container = document.getElementById("squad-container");
-      const icon = document.getElementById("toggle-squad-icon");
-      container.classList.toggle("hidden");
-      icon.textContent = container.classList.contains("hidden") ? "▼" : "▲";
-    });
-  }
+        return FORMATION_LAYOUTS[value]
+            ? value
+            : DEFAULT_FORMATION;
+    }
 
-  countrySelect.addEventListener("change", updateClubs);
-  clubSelect.addEventListener("change", updateTeamDetails);
+    function getSquad(club) {
+        return Array.isArray(club?.squad) ? club.squad : [];
+    }
 
-  updateClubs();
-});
+    function getPlayerStats(player) {
+        if (!player || !player.stats) {
+            return {
+                appearances: null,
+                starts: null,
+                minutes: null,
+                goals: null,
+                assists: null,
+                yellowCards: null,
+                redCards: null,
+                cleanSheets: null
+            };
+        }
+
+        return {
+            appearances: player.stats.appearances ?? null,
+            starts: player.stats.starts ?? null,
+            minutes: player.stats.minutes ?? null,
+            goals: player.stats.goals ?? null,
+            assists: player.stats.assists ?? null,
+            yellowCards: player.stats.yellowCards ?? null,
+            redCards: player.stats.redCards ?? null,
+            cleanSheets: player.stats.cleanSheets ?? null
+        };
+    }
+
+    function getPositionName(position) {
+        return POSITION_NAMES[position] || safeText(position);
+    }
+
+    function getPlayerNumber(player) {
+        return player?.number !== null &&
+            player?.number !== undefined &&
+            player?.number !== ""
+            ? `#${player.number}`
+            : "#—";
+    }
+
+    function getPlayerInitials(name) {
+        if (!name) return "⚽";
+
+        const words = String(name)
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+        if (words.length === 1) {
+            return words[0].slice(0, 2).toUpperCase();
+        }
+
+        return (
+            words[0].charAt(0) +
+            words[1].charAt(0)
+        ).toUpperCase();
+    }
+
+    function formatStat(value) {
+        return value === null || value === undefined
+            ? "—"
+            : String(value);
+    }
+
+    function sortSquad(squad) {
+        const order = {
+            GK: 1,
+            DF: 2,
+            MF: 3,
+            FW: 4
+        };
+
+        return [...squad].sort((a, b) => {
+            const positionA = order[a?.position] || 99;
+            const positionB = order[b?.position] || 99;
+
+            if (positionA !== positionB) {
+                return positionA - positionB;
+            }
+
+            const numberA =
+                typeof a?.number === "number"
+                    ? a.number
+                    : 999;
+
+            const numberB =
+                typeof b?.number === "number"
+                    ? b.number
+                    : 999;
+
+            return numberA - numberB;
+        });
+    }
+
+    // ---------------------------------------------------------
+    // LOAD DATA
+    // ---------------------------------------------------------
+
+    async function loadUkraineData() {
+        try {
+            /*
+             * Важливо:
+             * HTML користувача має:
+             *
+             * <script src="js/app.js" defer></script>
+             *
+             * Тому static import тут використовувати не можна.
+             * Dynamic import працює навіть у звичайному JS-файлі.
+             */
+            const module = await import("./ukraine.js");
+
+            if (!module || !module.ukraineData) {
+                throw new Error(
+                    "ukraineData не знайдено в ukraine.js"
+                );
+            }
+
+            ukraineData = module.ukraineData;
+
+            clubs = Array.isArray(ukraineData.clubs)
+                ? ukraineData.clubs
+                : [];
+
+            if (!clubs.length) {
+                throw new Error(
+                    "Масив ukraineData.clubs порожній."
+                );
+            }
+
+            initializeApp();
+        } catch (error) {
+            console.error(
+                "Помилка завантаження ukraine.js:",
+                error
+            );
+
+            showFatalError(
+                "Не вдалося завантажити ukraine.js. Перевір, що файл знаходиться в папці js поруч із app.js."
+            );
+        }
+    }
+
+    // ---------------------------------------------------------
+    // INITIALIZATION
+    // ---------------------------------------------------------
+
+    function initializeApp() {
+        populateCountrySelect();
+        populateClubSelect();
+
+        setupEventListeners();
+
+        const initialClub =
+            clubs.find((club) => club.id === "dynamo") ||
+            clubs[0];
+
+        if (initialClub) {
+            clubSelect.value = initialClub.id;
+            renderClub(initialClub.id);
+        }
+    }
+
+    // ---------------------------------------------------------
+    // COUNTRY
+    // ---------------------------------------------------------
+
+    function populateCountrySelect() {
+        countrySelect.innerHTML = "";
+
+        const option = document.createElement("option");
+
+        option.value = "ukraine";
+        option.textContent = "Україна (УПЛ)";
+
+        countrySelect.appendChild(option);
+
+        countrySelect.value = "ukraine";
+    }
+
+    // ---------------------------------------------------------
+    // CLUB SELECT
+    // ---------------------------------------------------------
+
+    function populateClubSelect() {
+        clubSelect.innerHTML = "";
+
+        clubs.forEach((club) => {
+            const option = document.createElement("option");
+
+            option.value = club.id;
+
+            const position = club.position
+                ? ` — ${club.position} місце`
+                : "";
+
+            option.textContent =
+                `${safeText(club.name)}${position}`;
+
+            clubSelect.appendChild(option);
+        });
+    }
+
+    // ---------------------------------------------------------
+    // EVENTS
+    // ---------------------------------------------------------
+
+    function setupEventListeners() {
+        countrySelect.addEventListener(
+            "change",
+            handleCountryChange
+        );
+
+        clubSelect.addEventListener(
+            "change",
+            handleClubChange
+        );
+
+        toggleSquadBtn.addEventListener(
+            "click",
+            toggleSquad
+        );
+
+        closeModal.addEventListener(
+            "click",
+            closePlayerModal
+        );
+
+        playerModal.addEventListener(
+            "click",
+            (event) => {
+                if (event.target === playerModal) {
+                    closePlayerModal();
+                }
+            }
+        );
+
+        document.addEventListener(
+            "keydown",
+            (event) => {
+                if (event.key === "Escape") {
+                    closePlayerModal();
+                }
+            }
+        );
+    }
+
+    function handleCountryChange() {
+        if (countrySelect.value !== "ukraine") {
+            countrySelect.value = "ukraine";
+        }
+
+        populateClubSelect();
+
+        if (clubs[0]) {
+            clubSelect.value = clubs[0].id;
+            renderClub(clubs[0].id);
+        }
+    }
+
+    function handleClubChange() {
+        renderClub(clubSelect.value);
+    }
+
+    // ---------------------------------------------------------
+    // MAIN CLUB RENDER
+    // ---------------------------------------------------------
+
+    function renderClub(clubId) {
+        const club = clubs.find(
+            (item) => String(item.id) === String(clubId)
+        );
+
+        if (!club) {
+            console.warn(
+                `Клуб з id "${clubId}" не знайдено.`
+            );
+            return;
+        }
+
+        currentClub = club;
+
+        renderClubInfo(club);
+        renderStaff(club);
+        renderCurrentFormation(club);
+        renderSquad(club);
+        renderMatches(club);
+        renderRecommendation(club);
+    }
+
+    // ---------------------------------------------------------
+    // CLUB INFO
+    // ---------------------------------------------------------
+
+    function renderClubInfo(club) {
+        clubName.textContent = safeText(club.name);
+
+        const league =
+            ukraineData.league ||
+            "Українська Прем'єр-ліга";
+
+        const season =
+            ukraineData.season ||
+            "2026/2027";
+
+        clubLeagueInfo.textContent =
+            `${league} • Сезон ${season}`;
+
+        clubRank.textContent =
+            club.position
+                ? `#${club.position}`
+                : "—";
+    }
+
+    // ---------------------------------------------------------
+    // STAFF
+    // ---------------------------------------------------------
+
+    function renderStaff(club) {
+        const coach =
+            club.coach?.headCoach ||
+            club.headCoach ||
+            "—";
+
+        coachName.textContent = coach;
+
+        let staff = [];
+
+        if (Array.isArray(club.coach?.assistants)) {
+            staff = club.coach.assistants;
+        } else if (Array.isArray(club.staff)) {
+            staff = club.staff;
+        }
+
+        staffMembers.textContent =
+            staff.length
+                ? staff.join(", ")
+                : "Дані не вказані";
+
+        currentFormationTitle.textContent =
+            normalizeFormation(
+                club.formation
+            );
+    }
+
+    // ---------------------------------------------------------
+    // PITCH
+    // ---------------------------------------------------------
+
+    function clearPitch(container) {
+        if (!container) return;
+
+        container.innerHTML = "";
+    }
+
+    function createPitchPlayer(
+        player,
+        position,
+        x,
+        y,
+        index
+    ) {
+        const wrapper =
+            document.createElement("button");
+
+        wrapper.type = "button";
+        wrapper.className = "pitch-player";
+
+        wrapper.style.left = `${x}%`;
+        wrapper.style.top = `${y}%`;
+
+        wrapper.dataset.index = String(index);
+
+        const number =
+            player?.number !== null &&
+            player?.number !== undefined &&
+            player?.number !== ""
+                ? player.number
+                : "—";
+
+        wrapper.innerHTML = `
+            <span class="pitch-player-number">
+                ${escapeHTML(number)}
+            </span>
+            <span class="pitch-player-name">
+                ${escapeHTML(
+                    getShortPlayerName(
+                        player?.name
+                    )
+                )}
+            </span>
+        `;
+
+        wrapper.title =
+            `${safeText(player?.name)} — ${getPositionName(position)}`;
+
+        wrapper.addEventListener(
+            "click",
+            () => {
+                openPlayerModal(player);
+            }
+        );
+
+        return wrapper;
+    }
+
+    function getShortPlayerName(name) {
+        if (!name) return "—";
+
+        const words = String(name)
+            .trim()
+            .split(/\s+/);
+
+        if (words.length === 1) {
+            return words[0];
+        }
+
+        return (
+            words[0] +
+            " " +
+            words[words.length - 1]
+                .charAt(0) +
+            "."
+        );
+    }
+
+    function getPlayersForFormation(
+        squad,
+        formation
+    ) {
+        const layout =
+            FORMATION_LAYOUTS[formation] ||
+            FORMATION_LAYOUTS[DEFAULT_FORMATION];
+
+        const result = [];
+
+        const usedIndexes = new Set();
+
+        layout.forEach(
+            ([position, x, y], layoutIndex) => {
+                let playerIndex =
+                    squad.findIndex(
+                        (player, index) =>
+                            !usedIndexes.has(index) &&
+                            player?.position === position
+                    );
+
+                /*
+                 * Якщо для конкретної позиції немає
+                 * гравця, шукаємо найближче амплуа.
+                 */
+                if (playerIndex === -1) {
+                    playerIndex =
+                        squad.findIndex(
+                            (_, index) =>
+                                !usedIndexes.has(index)
+                        );
+                }
+
+                if (playerIndex !== -1) {
+                    usedIndexes.add(playerIndex);
+
+                    result.push({
+                        player:
+                            squad[playerIndex],
+                        position,
+                        x,
+                        y,
+                        layoutIndex
+                    });
+                }
+            }
+        );
+
+        return result;
+    }
+
+    function renderPitch(
+        container,
+        club,
+        formation
+    ) {
+        clearPitch(container);
+
+        const squad =
+            sortSquad(
+                getSquad(club)
+            );
+
+        const positions =
+            getPlayersForFormation(
+                squad,
+                formation
+            );
+
+        positions.forEach(
+            ({
+                player,
+                position,
+                x,
+                y,
+                layoutIndex
+            }) => {
+                const element =
+                    createPitchPlayer(
+                        player,
+                        position,
+                        x,
+                        y,
+                        layoutIndex
+                    );
+
+                container.appendChild(element);
+            }
+        );
+    }
+
+    function renderCurrentFormation(club) {
+        const formation =
+            normalizeFormation(
+                club.formation
+            );
+
+        renderPitch(
+            currentPitchPlayers,
+            club,
+            formation
+        );
+    }
+
+    // ---------------------------------------------------------
+    // SQUAD
+    // ---------------------------------------------------------
+
+    function renderSquad(club) {
+        const squad =
+            sortSquad(
+                getSquad(club)
+            );
+
+        squadCount.textContent =
+            squad.length;
+
+        playersList.innerHTML = "";
+
+        if (!squad.length) {
+            playersList.innerHTML = `
+                <div class="empty-state">
+                    Дані про склад відсутні.
+                </div>
+            `;
+
+            return;
+        }
+
+        const groups = {
+            GK: [],
+            DF: [],
+            MF: [],
+            FW: []
+        };
+
+        squad.forEach((player) => {
+            const position =
+                player?.position;
+
+            if (!groups[position]) {
+                groups[position] = [];
+            }
+
+            groups[position].push(player);
+        });
+
+        Object.keys(groups).forEach(
+            (position) => {
+                const players =
+                    groups[position];
+
+                if (!players.length) {
+                    return;
+                }
+
+                const group =
+                    document.createElement("div");
+
+                group.className =
+                    "position-group";
+
+                const title =
+                    document.createElement("h3");
+
+                title.textContent =
+                    getPositionName(position);
+
+                group.appendChild(title);
+
+                players.forEach(
+                    (player) => {
+                        group.appendChild(
+                            createPlayerCard(
+                                player
+                            )
+                        );
+                    }
+                );
+
+                playersList.appendChild(group);
+            }
+        );
+    }
+
+    function createPlayerCard(player) {
+        const card =
+            document.createElement("button");
+
+        card.type = "button";
+        card.className =
+            "player-card";
+
+        const stats =
+            getPlayerStats(player);
+
+        card.innerHTML = `
+            <div class="player-card-left">
+                <div class="player-avatar">
+                    ${escapeHTML(
+                        getPlayerInitials(
+                            player?.name
+                        )
+                    )}
+                </div>
+
+                <div class="player-main-info">
+                    <strong>
+                        ${escapeHTML(
+                            safeText(
+                                player?.name
+                            )
+                        )}
+                    </strong>
+
+                    <span>
+                        ${escapeHTML(
+                            getPositionName(
+                                player?.position
+                            )
+                        )}
+                    </span>
+                </div>
+            </div>
+
+            <div class="player-card-number">
+                ${escapeHTML(
+                    getPlayerNumber(
+                        player
+                    )
+                )}
+            </div>
+
+            <div class="player-card-stats">
+                <span>
+                    <b>${formatStat(
+                        stats.appearances
+                    )}</b>
+                    <small>матчів</small>
+                </span>
+
+                <span>
+                    <b>${formatStat(
+                        stats.goals
+                    )}</b>
+                    <small>голів</small>
+                </span>
+
+                <span>
+                    <b>${formatStat(
+                        stats.assists
+                    )}</b>
+                    <small>асистів</small>
+                </span>
+            </div>
+        `;
+
+        card.addEventListener(
+            "click",
+            () => openPlayerModal(player)
+        );
+
+        return card;
+    }
+
+    // ---------------------------------------------------------
+    // SQUAD TOGGLE
+    // ---------------------------------------------------------
+
+    function toggleSquad() {
+        const isHidden =
+            squadContainer.classList.contains(
+                "hidden"
+            );
+
+        if (isHidden) {
+            squadContainer.classList.remove(
+                "hidden"
+            );
+
+            toggleSquadIcon.textContent = "▲";
+        } else {
+            squadContainer.classList.add(
+                "hidden"
+            );
+
+            toggleSquadIcon.textContent = "▼";
+        }
+    }
+
+    // ---------------------------------------------------------
+    // MATCHES
+    // ---------------------------------------------------------
+
+    function getMatches(club) {
+        if (
+            Array.isArray(club?.matches)
+        ) {
+            return club.matches.slice(
+                0,
+                10
+            );
+        }
+
+        if (
+            Array.isArray(
+                club?.lastMatches
+            )
+        ) {
+            return club.lastMatches.slice(
+                0,
+                10
+            );
+        }
+
+        if (
+            Array.isArray(
+                club?.recentMatches
+            )
+        ) {
+            return club.recentMatches.slice(
+                0,
+                10
+            );
+        }
+
+        return [];
+    }
+
+    function getMatchOpponent(
+        match,
+        club
+    ) {
+        if (match?.opponent) {
+            return match.opponent;
+        }
+
+        if (match?.homeTeam === club?.name) {
+            return match.awayTeam;
+        }
+
+        if (match?.awayTeam === club?.name) {
+            return match.homeTeam;
+        }
+
+        return "Суперник";
+    }
+
+    function getMatchScore(match) {
+        if (
+            match?.score !== undefined &&
+            match?.score !== null
+        ) {
+            return String(match.score);
+        }
+
+        if (
+            match?.homeScore !== undefined &&
+            match?.awayScore !== undefined
+        ) {
+            return `${match.homeScore}:${match.awayScore}`;
+        }
+
+        return "—";
+    }
+
+    function getMatchResult(
+        match,
+        club
+    ) {
+        if (match?.result) {
+            return String(
+                match.result
+            ).toUpperCase();
+        }
+
+        let goalsFor = null;
+        let goalsAgainst = null;
+
+        if (
+            typeof match?.goalsFor ===
+            "number"
+        ) {
+            goalsFor =
+                match.goalsFor;
+        }
+
+        if (
+            typeof match?.goalsAgainst ===
+            "number"
+        ) {
+            goalsAgainst =
+                match.goalsAgainst;
+        }
+
+        if (
+            goalsFor === null &&
+            match?.homeScore !== undefined &&
+            match?.awayScore !== undefined
+        ) {
+            if (
+                match.homeTeam ===
+                club?.name
+            ) {
+                goalsFor =
+                    Number(match.homeScore);
+
+                goalsAgainst =
+                    Number(match.awayScore);
+            } else {
+                goalsFor =
+                    Number(match.awayScore);
+
+                goalsAgainst =
+                    Number(match.homeScore);
+            }
+        }
+
+        if (
+            goalsFor === null ||
+            goalsAgainst === null
+        ) {
+            return "—";
+        }
+
+        if (goalsFor > goalsAgainst) {
+            return "В";
+        }
+
+        if (goalsFor < goalsAgainst) {
+            return "П";
+        }
+
+        return "Н";
+    }
+
+    function renderMatches(club) {
+        const matches =
+            getMatches(club);
+
+        matchesGrid.innerHTML = "";
+
+        selectedMatchStats.classList.add(
+            "hidden"
+        );
+
+        if (!matches.length) {
+            matchesGrid.innerHTML = `
+                <div class="empty-state">
+                    <strong>Матчі ще не додані до ukraine.js</strong>
+                    <p>
+                        Додай для клубу масив
+                        <code>matches</code>
+                        або
+                        <code>lastMatches</code>,
+                        і цей блок автоматично покаже
+                        останні 10 матчів.
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+        matches.forEach(
+            (match, index) => {
+                const opponent =
+                    getMatchOpponent(
+                        match,
+                        club
+                    );
+
+                const score =
+                    getMatchScore(match);
+
+                const result =
+                    getMatchResult(
+                        match,
+                        club
+                    );
+
+                const card =
+                    document.createElement(
+                        "button"
+                    );
+
+                card.type = "button";
+                card.className =
+                    "match-card";
+
+                if (result === "В") {
+                    card.classList.add(
+                        "match-win"
+                    );
+                } else if (
+                    result === "П"
+                ) {
+                    card.classList.add(
+                        "match-loss"
+                    );
+                } else if (
+                    result === "Н"
+                ) {
+                    card.classList.add(
+                        "match-draw"
+                    );
+                }
+
+                card.innerHTML = `
+                    <span class="match-opponent">
+                        ${escapeHTML(
+                            safeText(
+                                opponent
+                            )
+                        )}
+                    </span>
+
+                    <strong class="match-score">
+                        ${escapeHTML(score)}
+                    </strong>
+
+                    <span class="match-result">
+                        ${escapeHTML(result)}
+                    </span>
+                `;
+
+                card.addEventListener(
+                    "click",
+                    () =>
+                        renderMatchStats(
+                            match,
+                            club,
+                            index
+                        )
+                );
+
+                matchesGrid.appendChild(card);
+            }
+        );
+    }
+
+    // ---------------------------------------------------------
+    // MATCH STATISTICS
+    // ---------------------------------------------------------
+
+    function renderMatchStats(
+        match,
+        club,
+        index
+    ) {
+        const opponent =
+            getMatchOpponent(
+                match,
+                club
+            );
+
+        const score =
+            getMatchScore(match);
+
+        matchStatsTitle.textContent =
+            `${club.name} — ${opponent} (${score})`;
+
+        matchStatsBars.innerHTML = "";
+
+        const stats =
+            match?.statistics ||
+            match?.stats ||
+            {};
+
+        const normalizedStats = normalizeMatchStats(
+            stats
+        );
+
+        if (!normalizedStats.length) {
+            matchStatsBars.innerHTML = `
+                <div class="empty-state">
+                    Детальна статистика цього матчу
+                    відсутня в ukraine.js.
+                </div>
+            `;
+
+            selectedMatchStats.classList.remove(
+                "hidden"
+            );
+
+            return;
+        }
+
+        normalizedStats.forEach(
+            (stat) => {
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+                row.className =
+                    "stat-bar-row";
+
+                const home =
+                    Number(
+                        stat.home ?? 0
+                    );
+
+                const away =
+                    Number(
+                        stat.away ?? 0
+                    );
+
+                const total =
+                    home + away || 1;
+
+                const homePercent =
+                    Math.round(
+                        (home / total) *
+                        100
+                    );
+
+                const awayPercent =
+                    100 -
+                    homePercent;
+
+                row.innerHTML = `
+                    <div class="stat-bar-header">
+                        <span>
+                            ${escapeHTML(
+                                stat.label
+                            )}
+                        </span>
+
+                        <span>
+                            ${escapeHTML(
+                                String(home)
+                            )}
+                            :
+                            ${escapeHTML(
+                                String(away)
+                            )}
+                        </span>
+                    </div>
+
+                    <div class="stat-bar-track">
+                        <div
+                            class="stat-bar-home"
+                            style="width:${homePercent}%"
+                        ></div>
+
+                        <div
+                            class="stat-bar-away"
+                            style="width:${awayPercent}%"
+                        ></div>
+                    </div>
+                `;
+
+                matchStatsBars.appendChild(
+                    row
+                );
+            }
+        );
+
+        selectedMatchStats.classList.remove(
+            "hidden"
+        );
+    }
+
+    function normalizeMatchStats(stats) {
+        if (!stats || typeof stats !== "object") {
+            return [];
+        }
+
+        const labels = {
+            possession: "Володіння м'ячем",
+            shots: "Удари",
+            shotsOnTarget: "Удари в площину",
+            corners: "Кутові",
+            fouls: "Фоли",
+            offsides: "Офсайди",
+            yellowCards: "Жовті картки",
+            passes: "Передачі",
+            accuratePasses: "Точні передачі",
+            xG: "xG",
+            bigChances: "Гольові моменти"
+        };
+
+        const result = [];
+
+        Object.keys(stats).forEach(
+            (key) => {
+                const value =
+                    stats[key];
+
+                let home = null;
+                let away = null;
+
+                if (
+                    Array.isArray(value) &&
+                    value.length >= 2
+                ) {
+                    home = value[0];
+                    away = value[1];
+                } else if (
+                    value &&
+                    typeof value ===
+                        "object"
+                ) {
+                    home =
+                        value.home ??
+                        value.team ??
+                        value[0];
+
+                    away =
+                        value.away ??
+                        value.opponent ??
+                        value[1];
+                }
+
+                if (
+                    home === null ||
+                    away === null
+                ) {
+                    return;
+                }
+
+                result.push({
+                    label:
+                        labels[key] ||
+                        formatStatLabel(
+                            key
+                        ),
+                    home,
+                    away
+                });
+            }
+        );
+
+        return result;
+    }
+
+    function formatStatLabel(key) {
+        return String(key)
+            .replace(
+                /([A-Z])/g,
+                " $1"
+            )
+            .replace(
+                /^./,
+                (letter) =>
+                    letter.toUpperCase()
+            );
+    }
+
+    // ---------------------------------------------------------
+    // TACTICAL RECOMMENDATION
+    // ---------------------------------------------------------
+
+    function chooseRecommendedFormation(
+        club
+    ) {
+        const squad =
+            getSquad(club);
+
+        const counts = {
+            GK: 0,
+            DF: 0,
+            MF: 0,
+            FW: 0
+        };
+
+        squad.forEach(
+            (player) => {
+                if (
+                    counts[
+                        player?.position
+                    ] !== undefined
+                ) {
+                    counts[
+                        player.position
+                    ]++;
+                }
+            }
+        );
+
+        /*
+         * Не вигадуємо позицій.
+         * Рекомендація залежить від кількості
+         * гравців у складі та поточної схеми.
+         */
+
+        const current =
+            normalizeFormation(
+                club.formation
+            );
+
+        if (
+            counts.MF >= 5 &&
+            counts.DF >= 4
+        ) {
+            return "4-3-2-1";
+        }
+
+        if (
+            counts.FW >= 3 &&
+            counts.MF >= 3
+        ) {
+            return "4-3-3";
+        }
+
+        if (
+            counts.DF >= 5 &&
+            counts.MF >= 3
+        ) {
+            return "5-3-2";
+        }
+
+        return current;
+    }
+
+    function buildTacticalReasoning(
+        club,
+        recommended
+    ) {
+        const current =
+            normalizeFormation(
+                club.formation
+            );
+
+        if (
+            recommended === current
+        ) {
+            return (
+                `Поточна схема ${current} вже відповідає ` +
+                `базовому балансу складу. Аналітична рекомендація — ` +
+                `зберегти структуру та коригувати висоту ліній ` +
+                `і кількість гравців між лініями залежно від суперника.`
+            );
+        }
+
+        if (
+            recommended === "4-3-3"
+        ) {
+            return (
+                `Перехід із ${current} на 4-3-3 збільшує ` +
+                `ширину атаки та кількість варіантів для пресингу. ` +
+                `Трійка центральних півзахисників повинна забезпечити ` +
+                `контроль центральної зони, а вінгери — ширину.`
+            );
+        }
+
+        if (
+            recommended === "4-3-2-1"
+        ) {
+            return (
+                `Схема 4-3-2-1 дозволяє наситити центральну зону ` +
+                `та створити додаткові зв'язки між півзахистом і нападником. ` +
+                `Це корисно для контролю темпу та позиційних атак.`
+            );
+        }
+
+        if (
+            recommended === "5-3-2"
+        ) {
+            return (
+                `Схема 5-3-2 додає чисельність у захисті та ` +
+                `може бути використана для компактної середньої ` +
+                `або низької оборони з переходом у швидкі атаки.`
+            );
+        }
+
+        return (
+            `Рекомендована схема ${recommended} забезпечує ` +
+            `більш збалансоване розташування ліній та може ` +
+            `використовуватися як базова структура залежно від суперника.`
+        );
+    }
+
+    function renderRecommendation(club) {
+        const recommended =
+            chooseRecommendedFormation(
+                club
+            );
+
+        recommendedFormationTitle.textContent =
+            recommended;
+
+        tacticalReasoning.textContent =
+            buildTacticalReasoning(
+                club,
+                recommended
+            );
+
+        renderPitch(
+            recommendedPitchPlayers,
+            club,
+            recommended
+        );
+    }
+
+    // ---------------------------------------------------------
+    // PLAYER MODAL
+    // ---------------------------------------------------------
+
+    function openPlayerModal(player) {
+        if (!player) return;
+
+        modalPlayerNumber.textContent =
+            getPlayerNumber(player);
+
+        modalPlayerName.textContent =
+            safeText(
+                player.name,
+                "Невідомий гравець"
+            );
+
+        modalPlayerPos.textContent =
+            getPositionName(
+                player.position
+            );
+
+        const foot =
+            player.foot ||
+            player.preferredFoot ||
+            "Не вказано";
+
+        modalPlayerFoot.textContent =
+            foot;
+
+        const analysis =
+            getPlayerAnalysis(
+                player
+            );
+
+        modalPlayerStrengths.textContent =
+            analysis.strengths;
+
+        modalPlayerWeaknesses.textContent =
+            analysis.weaknesses;
+
+        modalPlayerRole.textContent =
+            analysis.role;
+
+        playerModal.classList.remove(
+            "hidden"
+        );
+
+        document.body.classList.add(
+            "modal-open"
+        );
+    }
+
+    function closePlayerModal() {
+        playerModal.classList.add(
+            "hidden"
+        );
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+    }
+
+    // ---------------------------------------------------------
+    // PLAYER ANALYSIS
+    // ---------------------------------------------------------
+
+    function getPlayerAnalysis(player) {
+        /*
+         * Якщо в ukraine.js згодом з'являться:
+         *
+         * strengths
+         * weaknesses
+         * role
+         *
+         * вони автоматично матимуть пріоритет
+         * над fallback-текстом.
+         */
+
+        const strengths =
+            player.strengths ||
+            getDefaultStrengths(
+                player.position
+            );
+
+        const weaknesses =
+            player.weaknesses ||
+            getDefaultWeaknesses(
+                player.position
+            );
+
+        const role =
+            player.role ||
+            getDefaultRole(
+                player.position
+            );
+
+        return {
+            strengths,
+            weaknesses,
+            role
+        };
+    }
+
+    function getDefaultStrengths(
+        position
+    ) {
+        switch (position) {
+            case "GK":
+                return (
+                    "Гра руками, реакція, контроль штрафного майданчика. " +
+                    "Конкретні показники залежать від доступної статистики."
+                );
+
+            case "DF":
+                return (
+                    "Позиційна дисципліна, єдиноборства та робота без м'яча. " +
+                    "Точні індивідуальні показники потребують матчевої статистики."
+                );
+
+            case "MF":
+                return (
+                    "Участь у розвитку атак, робота між лініями та контроль темпу. " +
+                    "Конкретна роль залежить від позиції у схемі."
+                );
+
+            case "FW":
+                return (
+                    "Завершення атак, відкривання та робота у фінальній третині. " +
+                    "Точні показники залежать від офіційної статистики."
+                );
+
+            default:
+                return (
+                    "Індивідуальні характеристики потребують "
+                    + "підтвердженої статистики гравця."
+                );
+        }
+    }
+
+    function getDefaultWeaknesses(
+        position
+    ) {
+        switch (position) {
+            case "GK":
+                return (
+                    "Без підтвердженої розширеної статистики "
+                    + "не можна достовірно оцінити слабкі сторони."
+                );
+
+            case "DF":
+                return (
+                    "Потребує аналізу дуелей, позиційних помилок "
+                    + "та поведінки при високій лінії оборони."
+                );
+
+            case "MF":
+                return (
+                    "Потребує аналізу втрат м'яча, прогресивних передач "
+                    + "та роботи після втрати володіння."
+                );
+
+            case "FW":
+                return (
+                    "Потребує аналізу реалізації, xG, пресингу "
+                    + "та ефективності відкривань."
+                );
+
+            default:
+                return (
+                    "Недостатньо підтверджених даних "
+                    + "для об'єктивної оцінки."
+                );
+        }
+    }
+
+    function getDefaultRole(
+        position
+    ) {
+        switch (position) {
+            case "GK":
+                return (
+                    "Воротар — останній рубіж оборони. "
+                    + "У системі з високою лінією важлива якість гри ногами."
+                );
+
+            case "DF":
+                return (
+                    "Захисник — забезпечення компактності оборони, "
+                    + "контроль зон та перехід у першу фазу розіграшу."
+                );
+
+            case "MF":
+                return (
+                    "Півзахисник — зв'язок між лініями, "
+                    + "контроль темпу та підтримка пресингу."
+                );
+
+            case "FW":
+                return (
+                    "Нападник — основна загроза у фінальній третині, "
+                    + "відкривання за спину та завершення атак."
+                );
+
+            default:
+                return (
+                    "Тактична роль визначається поточною схемою команди."
+                );
+        }
+    }
+
+    // ---------------------------------------------------------
+    // ERROR UI
+    // ---------------------------------------------------------
+
+    function showFatalError(message) {
+        const wrapper =
+            document.querySelector(
+                ".app-wrapper"
+            );
+
+        if (!wrapper) {
+            return;
+        }
+
+        const error =
+            document.createElement(
+                "div"
+            );
+
+        error.className =
+            "card app-error";
+
+        error.innerHTML = `
+            <h2>⚠️ Помилка даних</h2>
+            <p>
+                ${escapeHTML(message)}
+            </p>
+        `;
+
+        wrapper.prepend(error);
+    }
+
+    // ---------------------------------------------------------
+    // GLOBAL API
+    // ---------------------------------------------------------
+
+    /*
+     * Корисно для тестування з DevTools:
+     *
+     * window.FootballPsychopath.getCurrentClub()
+     * window.FootballPsychopath.getClubs()
+     */
+
+    window.FootballPsychopath = {
+        getCurrentClub() {
+            return currentClub;
+        },
+
+        getClubs() {
+            return [...clubs];
+        },
+
+        renderClub(clubId) {
+            renderClub(clubId);
+        },
+
+        openPlayer(player) {
+            openPlayerModal(player);
+        },
+
+        closePlayer() {
+            closePlayerModal();
+        }
+    };
+
+    // ---------------------------------------------------------
+    // START
+    // ---------------------------------------------------------
+
+    loadUkraineData();
+
+})();
