@@ -1,400 +1,170 @@
 let currentLang = 'uk';
 let activeClubData = null;
+let currentLeagueClubs = [];
 
-const translations = {
-    uk: {
-        title: "⚽ Футбольний Психопат",
-        subtitle: "Аналітика клубів UEFA та детальна статистика гравців",
-        search_title: "🇪🇺 Вибір клубу UEFA",
-        btn_search: "Аналізувати",
-        lbl_coach: "Головний тренер:",
-        lbl_last_matches: "📊 Останні 10 матчів",
-        squad: "Склад та статистика гравців",
-        starter: "Основа", sub: "Заміна",
-        win: "ПЕР", draw: "НІЧ", loss: "ПОР",
-        lbl_pos: "Позиція:", lbl_foot: "Робоча нога:", lbl_stamina: "Витривалість:",
-        lbl_strengths: "💪 Сильні сторони", lbl_weaknesses: "⚠️ Слабкі сторони",
-        lbl_tactics_title: "📋 Тактичний профіль",
-        lbl_role: "🎯 Роль:", lbl_zone: "📍 Зона:",
-        lbl_def: "🛡️ Пресинг:", lbl_workrate: "🏃‍♂️ Обсяг роботи:",
-        lbl_heatmap: "🔥 Теплова карта (Heatmap)",
-        lbl_stats: "📈 Повна статистика в єврокубках/лізі",
-        st_goals: "Голи", st_assists: "Асисти", st_rating: "Рейтинг",
-        foot_right: "Права", foot_left: "Ліва"
-    },
-    en: {
-        title: "⚽ Football Psychopath",
-        subtitle: "UEFA club analytics and detailed player statistics",
-        search_title: "🇪🇺 UEFA Club Selection",
-        btn_search: "Analyze",
-        lbl_coach: "Head Coach:",
-        lbl_last_matches: "📊 Last 10 Matches",
-        squad: "Squad & Player Statistics",
-        starter: "Starter", sub: "Substitute",
-        win: "WIN", draw: "DRAW", loss: "LOSS",
-        lbl_pos: "Position:", lbl_foot: "Preferred Foot:", lbl_stamina: "Stamina:",
-        lbl_strengths: "💪 Strengths", lbl_weaknesses: "⚠️ Weaknesses",
-        lbl_tactics_title: "📋 Tactical Profile",
-        lbl_role: "🎯 Role:", lbl_zone: "📍 Zone:",
-        lbl_def: "🛡️ Pressing:", lbl_workrate: "🏃‍♂️ Work Rate:",
-        lbl_heatmap: "🔥 Activity Heatmap",
-        lbl_stats: "📈 UEFA & Domestic Statistics",
-        st_goals: "Goals", st_assists: "Assists", st_rating: "Rating",
-        foot_right: "Right", foot_left: "Left"
-    },
-    cs: {
-        title: "⚽ Fotbalový Psychopat",
-        subtitle: "UEFA klubová analytika a podrobná statistika hráčů",
-        search_title: "🇪🇺 Výběr klubu UEFA",
-        btn_search: "Analyzovat",
-        lbl_coach: "Hlavní trenér:",
-        lbl_last_matches: "📊 Posledních 10 zápasů",
-        squad: "Sestava a statistiky hráčů",
-        starter: "Základ", sub: "Lavička",
-        win: "VÝH", draw: "REM", loss: "PRO",
-        lbl_pos: "Pozice:", lbl_foot: "Silnější noha:", lbl_stamina: "Vytrvalost:",
-        lbl_strengths: "💪 Silné stránky", lbl_weaknesses: "⚠️ Slabé stránky",
-        lbl_tactics_title: "📋 Taktický profil",
-        lbl_role: "🎯 Role:", lbl_zone: "Zóna:",
-        lbl_def: "🛡️ Presink:", lbl_workrate: "🏃‍♂️ Pracovní tempo:",
-        lbl_heatmap: "🔥 Teplotní mapa (Heatmap)",
-        lbl_stats: "📈 Statistiky v UEFA a lize",
-        st_goals: "Góly", st_assists: "Asistence", st_rating: "Hodnocení",
-        foot_right: "Pravá", foot_left: "Levá"
-    },
-    ru: {
-        title: "⚽ Футбольный Психопат",
-        subtitle: "Аналитика клубов UEFA и детальная статистика игроков",
-        search_title: "🇪🇺 Выбор клуба UEFA",
-        btn_search: "Анализировать",
-        lbl_coach: "Главный тренер:",
-        lbl_last_matches: "📊 Последние 10 матчей",
-        squad: "Состав и статистика игроков",
-        starter: "Основа", sub: "Замена",
-        win: "ПОБ", draw: "НИЧ", loss: "ПОР",
-        lbl_pos: "Позиция:", lbl_foot: "Рабочая нога:", lbl_stamina: "Выносливость:",
-        lbl_strengths: "💪 Сильные стороны", lbl_weaknesses: "⚠️ Слабые стороны",
-        lbl_tactics_title: "📋 Тактический профиль",
-        lbl_role: "🎯 Роль:", lbl_zone: "📍 Зона:",
-        lbl_def: "🛡️ Прессинг:", lbl_workrate: "🏃‍♂️ Объем работы:",
-        lbl_heatmap: "🔥 Тепловая карта (Heatmap)",
-        lbl_stats: "📈 Полная статистика в еврокубках/лиге",
-        st_goals: "Голы", st_assists: "Ассисты", st_rating: "Рейтинг",
-        foot_right: "Правая", foot_left: "Левая"
-    }
-};
-
-const uefaCountriesList = [
-    { code: "ENG", name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Англія (Premier League)" },
-    { code: "ITA", name: "🇮🇹 Італія (Serie A)" },
-    { code: "ESP", name: "🇪🇸 Іспанія (LaLiga)" },
-    { code: "GER", name: "🇩🇪 Німеччина (Bundesliga)" },
-    { code: "FRA", name: "🇫🇷 Франція (Ligue 1)" },
-    { code: "POR", name: "🇵🇹 Португалія (Liga Portugal)" },
-    { code: "BEL", name: "🇧🇪 Бельгія (Jupiler Pro League)" },
-    { code: "NED", name: "🇳🇱 Нідерланди (Eredivisie)" },
-    { code: "TUR", name: "🇹🇷 Туреччина (Süper Lig)" },
-    { code: "CZE", name: "🇨🇿 Чехія (Chance Liga)" },
-    { code: "GRE", name: "🇬🇷 Греція (Super League 1)" },
-    { code: "POL", name: "🇵🇱 Польща (Ekstraklasa)" },
-    { code: "DEN", name: "🇩🇰 Данія (Superliga)" },
-    { code: "NOR", name: "🇳🇴 Норвегія (Eliteserien)" },
-    { code: "CYP", name: "🇨🇾 Кіпр (Cyprus League)" },
-    { code: "SUI", name: "🇨🇭 Швейцарія (Super League)" },
-    { code: "AUT", name: "🇦🇹 Австрія (Bundesliga)" },
-    { code: "SCO", name: "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Шотландія (Premiership)" },
-    { code: "SWE", name: "🇸🇪 Швеція (Allsvenskan)" },
-    { code: "CRO", name: "🇭🇷 Хорватія (HNL)" },
-    { code: "ISR", name: "🇮🇱 Ізраїль (Premier League)" },
-    { code: "HUN", name: "🇭🇺 Угорщина (OTP Bank Liga)" },
-    { code: "UKR", name: "🇺🇦 Україна (УПЛ)" },
-    { code: "SRB", name: "🇷🇸 Сербія (SuperLiga)" },
-    { code: "ROU", name: "🇷🇴 Румунія (SuperLiga)" },
-    { code: "SVN", name: "🇸🇮 Словенія (PrvaLiga)" },
-    { code: "AZE", name: "🇦🇿 Азербайджан (Premyer Liqası)" },
-    { code: "SVK", name: "🇸🇰 Словаччина (Niké liga)" },
-    { code: "BUL", name: "🇧🇬 Болгарія (Parva Liga)" },
-    { code: "ISL", name: "🇮🇸 Ісландія (Besta deild)" },
-    { code: "IRL", name: "🇮🇪 Ірландія (Premier Division)" },
-    { code: "ARM", name: "🇦🇲 Вірменія (Premier League)" },
-    { code: "MDA", name: "🇲🇩 Молдова (Super Liga)" },
-    { code: "FIN", name: "🇫🇮 Фінляндія (Veikkausliiga)" },
-    { code: "KOS", name: "🇽🇰 Косово (Superliga)" },
-    { code: "KAZ", name: "🇰🇿 Казахстан (KPL)" },
-    { code: "BIH", name: "🇧🇦 Боснія і Герцеговина (WWin Liga)" },
-    { code: "LVA", name: "🇱🇻 Латвія (Virslīga)" },
-    { code: "FRO", name: "🇫🇴 Фарерські острови (Betri deildin)" },
-    { code: "MLT", name: "🇲🇹 Мальта (Premier League)" },
-    { code: "EST", name: "🇪🇪 Естонія (Premium Liiga)" },
-    { code: "ALB", name: "🇦🇱 Албанія (Superiore)" },
-    { code: "MKD", name: "🇲🇰 Північна Македонія (1. MFL)" },
-    { code: "LTU", name: "🇱🇹 Литва (TOPLYGA)" },
-    { code: "NIR", name: "🇬🇧 Північна Ірландія (Premiership)" },
-    { code: "GIB", name: "🇬🇮 Гібралтар (Football League)" },
-    { code: "AND", name: "🇦🇩 Андорра (Primera Divisió)" },
-    { code: "BLR", name: "🇧🇾 Білорусь (Вища ліга)" },
-    { code: "GEO", name: "🇬🇪 Грузія (Erovnuli Liga)" },
-    { code: "LUX", name: "🇱🇺 Люксембург (BGL Ligue)" },
-    { code: "MNE", name: "🇲🇪 Чорногорія (1. CFL)" },
-    { code: "WAL", name: "🏴󠁧󠁢󠁷󠁬󠁳️⃣ Уельс (Cymru Premier)" },
-    { code: "SMR", name: "🇸🇲 Сан-Марино (Campionato Sammarinese)" },
-    { code: "RUS", name: "⛔ Росія (Відсторонена УЄФА)" }
+const uefaLeagues = [
+    { code: "UKR", name: "🇺🇦 Україна (Українська Прем'єр-Ліга)", count: 16 },
+    { code: "ENG", name: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Англія (Premier League)", count: 20 },
+    { code: "ESP", name: "🇪🇸 Іспанія (LaLiga)", count: 20 },
+    { code: "GER", name: "🇩🇪 Німеччина (Bundesliga)", count: 18 },
+    { code: "ITA", name: "🇮🇹 Італія (Serie A)", count: 20 },
+    { code: "FRA", name: "🇫🇷 Франція (Ligue 1)", count: 18 },
+    { code: "CZE", name: "🇨🇿 Чехія (Chance Liga)", count: 16 },
+    { code: "POL", name: "🇵🇱 Польща (Ekstraklasa)", count: 18 },
+    { code: "POR", name: "🇵🇹 Португалія (Liga Portugal)", count: 18 },
+    { code: "NED", name: "🇳🇱 Нідерланди (Eredivisie)", count: 18 },
+    { code: "BEL", name: "🇧🇪 Бельгія (Jupiler Pro League)", count: 16 },
+    { code: "TUR", name: "🇹🇷 Туреччина (Süper Lig)", count: 19 },
+    { code: "AUT", name: "🇦🇹 Австрія (Bundesliga)", count: 12 },
+    { code: "SCO", name: "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Шотландія (Premiership)", count: 12 }
 ];
 
-const uefaClubsDatabase = {
-    UKR: [
-        {
-            id: "dynamo_kyiv",
-            title: "ФК Динамо Київ",
-            country: "🇺🇦 Україна (УПЛ / Ліга Європи)",
-            coach: "Олександр Шовковський",
-            matches: [
-                { opp: "Ворскла", res: "win", score: "3:1" },
-                { opp: "Шахтар", res: "draw", score: "1:1" },
-                { opp: "Заря", res: "win", score: "2:0" },
-                { opp: "Полісся", res: "win", score: "2:1" },
-                { opp: "Ференцварош", res: "loss", score: "0:4" }
-            ],
-            players: [
-                {
-                    id: 101, status: "starter", stamina: "88%", footKey: "foot_right",
-                    name: { uk: "Микола Шапаренко", en: "Mykola Shaparenko", cs: "Mykola Shaparenko", ru: "Николай Шапаренко" },
-                    pos: { uk: "Півзахисник (CM / CAM)", en: "Midfielder (CM / CAM)", cs: "Záložník (CM / CAM)", ru: "Полузащитник (CM / CAM)" },
-                    strengths: { uk: "Дриблінг, бачення поля", en: "Dribbling, vision", cs: "Driblink, vidění hry", ru: "Дриблинг, видение поля" },
-                    weaknesses: { uk: "Верхові єдиноборства", en: "Aerial duels", cs: "Hlavičkování", ru: "Верховые единоборства" },
-                    tacticalProfile: {
-                        bestRole: { uk: "Атакувальний плеймейкер", en: "Advanced Playmaker", cs: "Útočný tvorce hry", ru: "Атакующий плеймейкер" },
-                        bestZone: { uk: "Центральна зона", en: "Central zone", cs: "Centrální zóna", ru: "Центральная зона" },
-                        defensiveWork: { uk: "Пресинг опорної зони", en: "Pressing DMs", cs: "Presink zálohy", ru: "Прессинг опорников" },
-                        workRate: { uk: "Атака: Висока | Оборона: Середня", en: "Att: High | Def: Medium", cs: "Útok: Vysoká | Obrana: Střední", ru: "Атака: Высокая | Оборона: Средняя" }
-                    },
-                    heatmap: [15, 35, 20, 40, 85, 60, 30, 70, 45, 10, 25, 15],
-                    detailedStats: { goals: 5, assists: 7, rating: 7.8 }
-                }
-            ]
-        },
-        {
-            id: "shakhtar_donetsk",
-            title: "ФК Шахтар Донецьк",
-            country: "🇺🇦 Україна (УПЛ / Ліга Чемпіонів)",
-            coach: "Маріно Пушич",
-            matches: [
-                { opp: "Янг Бойз", res: "win", score: "2:1" },
-                { opp: "Динамо Київ", res: "draw", score: "1:1" }
-            ],
-            players: [
-                {
-                    id: 103, status: "starter", stamina: "93%", footKey: "foot_left",
-                    name: { uk: "Георгій Судаков", en: "Heorhiy Sudakov", cs: "Heorhiy Sudakov", ru: "Георгий Судаков" },
-                    pos: { uk: "Плеймейкер (CAM)", en: "Playmaker (CAM)", cs: "Tvorce hry (CAM)", ru: "Плеймейкер (CAM)" },
-                    strengths: { uk: "Далекий удар, контроль", en: "Long shots, control", cs: "Střelba, kontrola míče", ru: "Дальний удар, контроль" },
-                    weaknesses: { uk: "Грубий відбір", en: "Tackling timing", cs: "Odebírání míče", ru: "Отбор мяча" },
-                    tacticalProfile: {
-                        bestRole: { uk: "Вільний художник", en: "Free-role Playmaker", cs: "Volný tvorce hry", ru: "Свободный плеймейкер" },
-                        bestZone: { uk: "Атакуюча третина", en: "Attacking third", cs: "Útočná třetina", ru: "Атакующая треть" },
-                        defensiveWork: { uk: "Контрпресинг", en: "Counter-pressing", cs: "Kontrapresink", ru: "Контрпрессинг" },
-                        workRate: { uk: "Атака: Висока | Оборона: Середня", en: "Att: High | Def: Medium", cs: "Útok: Vysoká | Obrana: Střední", ru: "Атака: Высокая | Оборона: Средняя" }
-                    },
-                    heatmap: [20, 30, 40, 50, 75, 85, 80, 60, 30, 40, 50, 20],
-                    detailedStats: { goals: 8, assists: 6, rating: 8.1 }
-                }
-            ]
-        }
-    ]
-};
+// Автоматичний генератор повного складу команди вищої ліги
+function generateFullClubData(countryCode, clubIndex) {
+    const clubNames = {
+        UKR: ["Динамо Київ", "Шахтар Донецьк", "Полісся Житомир", "Олександрія", "Рух Львів", "Кривбас", "Зоря Луганськ", "Ворскла Полтава", "Колос Ковалівка", "ЛНЗ Черкаси", "Карпати Львів", "Верес Рівне", "Оболонь Київ", "Чорноморець", "Лівий Берег", "Інгулець"],
+        CZE: ["Sparta Praha", "Slavia Praha", "Viktoria Plzeň", "Baník Ostrava", "Mladá Boleslav", "Slovan Liberec", "Slovácko", "Sigma Olomouc", "Hradec Králové", "Teplice", "Bohemians 1905", "Jablonec", "Pardubice", "Zlín", "Karviná", "České Budějovice"],
+        ENG: ["Manchester City", "Arsenal", "Liverpool", "Aston Villa", "Tottenham", "Chelsea", "Newcastle", "Manchester United", "West Ham", "Brighton", "Bournemouth", "Crystal Palace", "Wolves", "Everton", "Brentford", "Fulham", "Nottingham Forest", "Leicester", "Ipswich", "Southampton"]
+    };
 
-function ensureAllCountriesHaveClubs() {
-    uefaCountriesList.forEach(c => {
-        if (!uefaClubsDatabase[c.code]) {
-            const countryNameOnly = c.name.split(' ')[1] || c.code;
-            uefaClubsDatabase[c.code] = [
-                {
-                    id: `club_1_${c.code.toLowerCase()}`,
-                    title: `ФК Чемпіон (${countryNameOnly})`,
-                    country: `${c.name} / Єврокубки`,
-                    coach: "Головний тренер A",
-                    matches: [
-                        { opp: "Суперник A", res: "win", score: "2:0" },
-                        { opp: "Суперник B", res: "draw", score: "1:1" }
-                    ],
-                    players: [
-                        {
-                            id: Math.floor(Math.random() * 80000) + 10000,
-                            status: "starter", stamina: "90%", footKey: "foot_right",
-                            name: { uk: "Лідер Атаки", en: "Main Striker", cs: "Hlavní útočník", ru: "Лидер Атаки" },
-                            pos: { uk: "Форвард (ST)", en: "Striker (ST)", cs: "Útočník (ST)", ru: "Нападающий (ST)" },
-                            strengths: { uk: "Швидкість, точний удар", en: "Speed, finishing", cs: "Rychlost, zakončení", ru: "Скорость, удар" },
-                            weaknesses: { uk: "Гра головою", en: "Aerial duels", cs: "Hlavičkování", ru: "Игра головой" },
-                            tacticalProfile: {
-                                bestRole: { uk: "Центрфорвард", en: "Advanced Forward", cs: "Hrotový útočník", ru: "Центрфорвард" },
-                                bestZone: { uk: "Штрафний майданчик", en: "Penalty box", cs: "Pokutové území", ru: "Штрафная" },
-                                defensiveWork: { uk: "Пресинг захисників", en: "Pressing defenders", cs: "Presink obranců", ru: "Прессинг" },
-                                workRate: { uk: "Атака: Висока | Оборона: Низька", en: "Att: High | Def: Low", cs: "Útok: Vysoká | Obrana: Nízká", ru: "Атака: Высокая | Оборона: Низкая" }
-                            },
-                            heatmap: [10, 10, 20, 30, 40, 70, 90, 80, 20, 30, 60, 40],
-                            detailedStats: { goals: 9, assists: 4, rating: 7.9 }
-                        }
-                    ]
-                },
-                {
-                    id: `club_2_${c.code.toLowerCase()}`,
-                    title: `ФК Віце-чемпіон (${countryNameOnly})`,
-                    country: `${c.name} / Єврокубки`,
-                    coach: "Головний тренер B",
-                    matches: [
-                        { opp: "Суперник C", res: "loss", score: "0:1" },
-                        { opp: "Суперник D", res: "win", score: "3:1" }
-                    ],
-                    players: [
-                        {
-                            id: Math.floor(Math.random() * 80000) + 10000,
-                            status: "starter", stamina: "88%", footKey: "foot_left",
-                            name: { uk: "Опорник Команди", en: "Defensive Midfielder", cs: "Defenzivní záložník", ru: "Опорный защитник" },
-                            pos: { uk: "Опорний півзахисник (CDM)", en: "Midfielder (CDM)", cs: "Záložník (CDM)", ru: "Опорник (CDM)" },
-                            strengths: { uk: "Відбір, перехоплення", en: "Tackling, interceptions", cs: "Odebírání míče", ru: "Отбор, перехваты" },
-                            weaknesses: { uk: "Дриблінг", en: "Dribbling", cs: "Driblink", ru: "Дриблинг" },
-                            tacticalProfile: {
-                                bestRole: { uk: "Руйнівник", en: "Ball Winning Midfielder", cs: "Defenzivní pes", ru: "Волнорез" },
-                                bestZone: { uk: "Опорна зона", en: "Defensive zone", cs: "Defenzivní zóna", ru: "Опорная зона" },
-                                defensiveWork: { uk: "Захист штрафного", en: "Box protection", cs: "Ochrana vápna", ru: "Защита штрафной" },
-                                workRate: { uk: "Атака: Низька | Оборона: Висока", en: "Att: Low | Def: High", cs: "Útok: Nízká | Obrana: Vysoká", ru: "Атака: Низкая | Оборона: Высокая" }
-                            },
-                            heatmap: [40, 60, 50, 30, 80, 90, 70, 40, 20, 30, 20, 10],
-                            detailedStats: { goals: 1, assists: 3, rating: 7.4 }
-                        }
-                    ]
-                }
-            ];
-        }
+    const namesList = clubNames[countryCode] || Array.from({length: 16}, (_, i) => `Клуб #${i+1} (${countryCode})`);
+    const name = namesList[clubIndex] || `ФК Команда ${clubIndex + 1}`;
+
+    const positions = ["Воротар (GK)", "Центрбек (CB)", "Лівий захисник (LB)", "Правий захисник (RB)", "Опорник (CDM)", "Плеймейкер (CM)", "Вінгер (LW/RW)", "Форвард (ST)"];
+    
+    // Генерація повного складу 18-22 гравців для обраного клубу
+    const squad = Array.from({ length: 20 }, (_, i) => {
+        const isStarter = i < 11;
+        const pos = positions[i % positions.length];
+        return {
+            id: clubIndex * 100 + i + 1,
+            name: `Гравець #${i + 1} (${name.split(' ')[0]})`,
+            status: isStarter ? "starter" : "sub",
+            pos: pos,
+            foot: i % 2 === 0 ? "Права" : "Ліва",
+            stamina: `${82 + (i % 15)}%`,
+            strengths: "Висока точність передач, бачення поля, пресинг",
+            weaknesses: "Гра головою при кутових",
+            tacticalProfile: {
+                role: isStarter ? "Ключовий виконавець" : "Ротація / Заміна",
+                zone: "Центральна третина поля",
+                pressing: "Висока інтенсивність",
+                workrate: "Атака: Висока | Оборона: Середня"
+            },
+            heatmap: Array.from({ length: 12 }, () => Math.floor(Math.random() * 85)),
+            stats: {
+                goals: Math.floor(Math.random() * 12),
+                assists: Math.floor(Math.random() * 10),
+                rating: (6.5 + Math.random() * 2.3).toFixed(1)
+            }
+        };
     });
+
+    return {
+        id: `club_${countryCode}_${clubIndex}`,
+        title: name,
+        country: countryCode,
+        coach: `Головний тренер (${name})`,
+        staff: "Асистент тренера, Тренер воротарів, Аналітик, Фізіотерапевт",
+        matches: [
+            { opp: "Суперник A", res: "win", score: "2:0" },
+            { opp: "Суперник B", res: "draw", score: "1:1" },
+            { opp: "Суперник C", res: "loss", score: "0:2" },
+            { opp: "Суперник D", res: "win", score: "3:1" }
+        ],
+        players: squad
+    };
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    ensureAllCountriesHaveClubs();
-
-    const langSelect = document.getElementById("lang-select");
     const countrySelect = document.getElementById("country-select");
     const clubSelect = document.getElementById("club-select");
     const searchBtn = document.getElementById("search-btn");
+    const closeModalBtn = document.getElementById("close-modal-btn");
     const modal = document.getElementById("player-modal");
-    const closeBtn = document.getElementById("close-modal-btn");
 
-    populateCountrySelect();
-
-    countrySelect.addEventListener("change", () => {
-        populateClubSelect();
+    // Заповнення списку країн
+    uefaLeagues.forEach(l => {
+        const opt = document.createElement("option");
+        opt.value = l.code;
+        opt.innerText = `${l.name} (${l.count} клубів)`;
+        countrySelect.appendChild(opt);
     });
 
-    langSelect.addEventListener("change", (e) => {
-        currentLang = e.target.value;
-        updateUI();
-    });
-
-    searchBtn.addEventListener("click", () => {
-        executeSearch();
-    });
-
-    closeBtn.addEventListener("click", closeModal);
+    countrySelect.addEventListener("change", () => loadLeagueClubs(countrySelect.value));
+    searchBtn.addEventListener("click", executeSearch);
+    closeModalBtn.addEventListener("click", closeModal);
+    
     window.addEventListener("click", (e) => {
         if (e.target === modal) closeModal();
     });
 
-    populateClubSelect();
-    executeSearch();
+    loadLeagueClubs("UKR");
 });
 
-function populateCountrySelect() {
-    const countrySelect = document.getElementById("country-select");
-    countrySelect.innerHTML = "";
-
-    uefaCountriesList.forEach(c => {
-        const option = document.createElement("option");
-        option.value = c.code;
-        option.innerText = c.name;
-        if (c.code === "UKR") option.selected = true;
-        countrySelect.appendChild(option);
-    });
-}
-
-function populateClubSelect() {
-    const countryKey = document.getElementById("country-select").value;
+function loadLeagueClubs(countryCode) {
     const clubSelect = document.getElementById("club-select");
     clubSelect.innerHTML = "";
+    
+    const leagueInfo = uefaLeagues.find(l => l.code === countryCode) || uefaLeagues[0];
+    currentLeagueClubs = Array.from({ length: leagueInfo.count }, (_, i) => generateFullClubData(countryCode, i));
 
-    const clubs = uefaClubsDatabase[countryKey] || [];
-    clubs.forEach(club => {
-        const option = document.createElement("option");
-        option.value = club.id;
-        option.innerText = club.title;
-        clubSelect.appendChild(option);
+    currentLeagueClubs.forEach(club => {
+        const opt = document.createElement("option");
+        opt.value = club.id;
+        opt.innerText = club.title;
+        clubSelect.appendChild(opt);
     });
+
+    executeSearch();
 }
 
 function executeSearch() {
-    const countryKey = document.getElementById("country-select").value;
     const clubId = document.getElementById("club-select").value;
-
-    const countryClubs = uefaClubsDatabase[countryKey] || [];
-    activeClubData = countryClubs.find(c => c.id === clubId) || countryClubs[0];
-
-    updateUI();
-}
-
-function updateUI() {
-    const t = translations[currentLang];
-
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.getAttribute("data-i18n");
-        if (t[key]) el.innerText = t[key];
-    });
-
-    if (!activeClubData) return;
+    activeClubData = currentLeagueClubs.find(c => c.id === clubId) || currentLeagueClubs[0];
 
     document.getElementById("club-title").innerText = activeClubData.title;
     document.getElementById("club-coach").innerText = activeClubData.coach;
+    document.getElementById("club-staff").innerText = activeClubData.staff;
     document.getElementById("club-country-badge").innerText = activeClubData.country;
 
     renderMatches(activeClubData.matches);
-    renderPlayersList(activeClubData.players);
+    renderSquad(activeClubData.players);
 }
 
 function renderMatches(matches) {
     const container = document.getElementById("matches-list");
     container.innerHTML = "";
-    const t = translations[currentLang];
-
     matches.forEach(m => {
-        const item = document.createElement("div");
-        item.className = "match-badge";
-        item.innerHTML = `
-            <span class="match-res ${m.res}">${t[m.res]}</span>
+        const el = document.createElement("div");
+        el.className = "match-badge";
+        el.innerHTML = `
+            <span class="match-res ${m.res}">${m.res.toUpperCase()}</span>
             <div class="match-opp">${m.opp}</div>
             <div class="match-score">${m.score}</div>
         `;
-        container.appendChild(item);
+        container.appendChild(el);
     });
 }
 
-function renderPlayersList(players) {
+function renderSquad(players) {
     const container = document.getElementById("players-list");
     container.innerHTML = "";
-    const t = translations[currentLang];
-
-    players.forEach(player => {
+    players.forEach(p => {
         const card = document.createElement("div");
         card.className = "player-card";
-        card.addEventListener("click", () => openPlayerModal(player.id));
+        card.onclick = () => openPlayerModal(p.id);
 
         card.innerHTML = `
             <div class="player-card-header">
-                <h3 style="font-size:1rem;">${player.name[currentLang] || player.name['uk']}</h3>
-                <span class="status-pill ${player.status}">${t[player.status]}</span>
+                <strong>${p.name}</strong>
+                <span class="status-pill ${p.status}">${p.status === "starter" ? "Основа" : "Заміна"}</span>
             </div>
-            <p style="color: var(--text-secondary); margin-top:2px; font-size: 0.825rem;">${player.pos[currentLang] || player.pos['uk']}</p>
+            <p style="color: var(--text-secondary); font-size: 0.825rem; margin-top:2px;">${p.pos}</p>
             <div class="player-mini-stats">
-                <span>⚽ Голи: <strong>${player.detailedStats.goals}</strong></span>
-                <span>🅰️ Асисти: <strong>${player.detailedStats.assists}</strong></span>
-                <span>⭐ Рейтинг: <strong>${player.detailedStats.rating}</strong></span>
+                <span>⚽ Голи: <strong>${p.stats.goals}</strong></span>
+                <span>🅰️ Асисти: <strong>${p.stats.assists}</strong></span>
+                <span>⭐ <strong>${p.stats.rating}</strong></span>
             </div>
         `;
         container.appendChild(card);
@@ -402,52 +172,48 @@ function renderPlayersList(players) {
 }
 
 function openPlayerModal(playerId) {
-    if (!activeClubData) return;
     const player = activeClubData.players.find(p => p.id === playerId);
     if (!player) return;
 
-    const t = translations[currentLang];
-    const lang = currentLang;
+    document.getElementById("modal-player-name").innerText = player.name;
+    document.getElementById("modal-player-status").innerText = player.status === "starter" ? "Основа" : "Заміна";
+    document.getElementById("modal-player-status").className = `status-pill ${player.status}`;
 
-    document.getElementById('modal-player-name').innerText = player.name[lang] || player.name['uk'];
-    document.getElementById('modal-player-status').innerText = t[player.status];
-    document.getElementById('modal-player-status').className = `status-pill ${player.status}`;
+    document.getElementById("modal-player-pos").innerText = player.pos;
+    document.getElementById("modal-player-foot").innerText = player.foot;
+    document.getElementById("modal-player-stamina").innerText = player.stamina;
+    document.getElementById("modal-player-strengths").innerText = player.strengths;
+    document.getElementById("modal-player-weaknesses").innerText = player.weaknesses;
 
-    document.getElementById('modal-player-pos').innerText = player.pos[lang] || player.pos['uk'];
-    document.getElementById('modal-player-foot').innerText = t[player.footKey];
-    document.getElementById('modal-player-stamina').innerText = player.stamina;
-    document.getElementById('modal-player-strengths').innerText = player.strengths[lang] || player.strengths['uk'];
-    document.getElementById('modal-player-weaknesses').innerText = player.weaknesses[lang] || player.weaknesses['uk'];
+    document.getElementById("m-tac-role").innerText = player.tacticalProfile.role;
+    document.getElementById("m-tac-zone").innerText = player.tacticalProfile.zone;
+    document.getElementById("m-tac-def").innerText = player.tacticalProfile.pressing;
+    document.getElementById("m-tac-workrate").innerText = player.tacticalProfile.workrate;
 
-    document.getElementById('m-tac-role').innerText = player.tacticalProfile.bestRole[lang] || player.tacticalProfile.bestRole['uk'];
-    document.getElementById('m-tac-zone').innerText = player.tacticalProfile.bestZone[lang] || player.tacticalProfile.bestZone['uk'];
-    document.getElementById('m-tac-def').innerText = player.tacticalProfile.defensiveWork[lang] || player.tacticalProfile.defensiveWork['uk'];
-    document.getElementById('m-tac-workrate').innerText = player.tacticalProfile.workRate[lang] || player.tacticalProfile.workRate['uk'];
-
-    document.getElementById('m-goals').innerText = player.detailedStats.goals;
-    document.getElementById('m-assists').innerText = player.detailedStats.assists;
-    document.getElementById('m-rating').innerText = player.detailedStats.rating;
+    document.getElementById("m-goals").innerText = player.stats.goals;
+    document.getElementById("m-assists").innerText = player.stats.assists;
+    document.getElementById("m-rating").innerText = player.stats.rating;
 
     renderHeatmap(player.heatmap);
 
-    const modal = document.getElementById('player-modal');
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+    const modal = document.getElementById("player-modal");
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
 }
 
 function closeModal() {
-    const modal = document.getElementById('player-modal');
-    modal.classList.add('hidden');
-    document.body.style.overflow = '';
+    const modal = document.getElementById("player-modal");
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
 }
 
-function renderHeatmap(intensityValues) {
-    const grid = document.getElementById('heatmap-grid');
-    grid.innerHTML = '';
-    intensityValues.forEach(value => {
-        const cell = document.createElement('div');
-        cell.className = 'heatmap-cell';
-        let opacity = value / 100;
+function renderHeatmap(values) {
+    const grid = document.getElementById("heatmap-grid");
+    grid.innerHTML = "";
+    values.forEach(val => {
+        const cell = document.createElement("div");
+        cell.className = "heatmap-cell";
+        const opacity = val / 100;
         if (opacity > 0) cell.style.backgroundColor = `rgba(239, 68, 68, ${opacity})`;
         grid.appendChild(cell);
     });
