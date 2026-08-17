@@ -1,11 +1,14 @@
 // ukraine.js
 // Українська Прем'єр-ліга — сезон 2026/2027
+// Дані актуалізовані на 17.08.2026.
+// Статистика гравців не вигадується: якщо точне значення
+// ще не підтверджене, використовується null.
 
 export const ukraineData = {
     country: "Україна",
     league: "Українська Прем'єр-ліга",
     season: "2026/2027",
-    asOf: "2026-08-15",
+    asOf: "2026-08-17",
 
     clubs: [
 
@@ -17,10 +20,12 @@ export const ukraineData = {
             id: "karpaty",
             name: "Карпати",
             city: "Львів",
+
             position: 1,
-            points: 6,
+            points: 9,
 
             president: null,
+            director: "Русол Андрій Анатолійович",
 
             coach: {
                 headCoach: "Фернандес Діас Франсіско Хав’єр",
@@ -32,56 +37,44 @@ export const ukraineData = {
             formation: "4-2-3-1",
 
             stats: {
-                played: 2,
-                wins: 2,
+                played: 3,
+                wins: 3,
                 draws: 0,
                 losses: 0,
-                goalsFor: 7,
-                goalsAgainst: 1,
-                goalDifference: 6,
-                cleanSheets: 1
+                goalsFor: null,
+                goalsAgainst: null,
+                goalDifference: null,
+                cleanSheets: null
             },
 
             squad: [
                 {
-                    number: 1,
-                    name: "Жилкін Антон",
+                    number: 99,
+                    name: "Герета Юрій-Володимир",
                     position: "GK",
                     stats: null
                 },
                 {
-                    number: 80,
-                    name: "Мисак Роман",
-                    position: "GK",
-                    stats: null
-                },
-                {
-                    number: 4,
-                    name: "Бабогло Владислав",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 17,
-                    name: "Вантух Роман",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 47,
-                    name: "Карнейро Педрозу Жан Енріке",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 73,
-                    name: "Лях Ростислав",
-                    position: "DF",
+                    number: null,
+                    name: "Кецик Матвій",
+                    position: "MF",
                     stats: null
                 },
                 {
                     number: 5,
                     name: "Булеза Андрій",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: 44,
+                    name: "Холод Віталій",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Калінець Ерік",
                     position: "DF",
                     stats: null
                 },
@@ -92,38 +85,26 @@ export const ukraineData = {
                     stats: null
                 },
                 {
-                    number: 19,
-                    name: "Карабін Ярослав",
+                    number: null,
+                    name: "Абрамчук Олександр",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 26,
-                    name: "Костенко Ян",
-                    position: "MF",
+                    number: null,
+                    name: "Киричок Микола",
+                    position: "DF",
                     stats: null
                 },
                 {
-                    number: 70,
-                    name: "Алькайн Мічелена Чебер",
-                    position: "MF",
-                    stats: null
-                },
-                {
-                    number: 22,
-                    name: "Кокодиняк Юрій",
-                    position: "MF",
-                    stats: null
-                },
-                {
-                    number: 28,
-                    name: "Дєдов Олександр",
+                    number: null,
+                    name: "Сергієнко Олександр-Юрій",
                     position: "FW",
                     stats: null
                 },
                 {
-                    number: 79,
-                    name: "Івасій Андрій",
+                    number: null,
+                    name: "Сливка Олександр",
                     position: "FW",
                     stats: null
                 }
@@ -140,13 +121,14 @@ export const ukraineData = {
             id: "shakhtar",
             name: "Шахтар",
             city: "Донецьк",
+
             position: 2,
-            points: 6,
+            points: 9,
 
             president: "Ахметов Рінат Леонідович",
 
             coach: {
-                headCoach: "Арда Туран",
+                headCoach: "Туран Арда",
                 assistants: []
             },
 
@@ -155,99 +137,81 @@ export const ukraineData = {
             formation: "4-2-3-1",
 
             stats: {
-                played: 2,
-                wins: 2,
+                played: 3,
+                wins: 3,
                 draws: 0,
                 losses: 0,
-                goalsFor: 7,
-                goalsAgainst: 1,
-                goalDifference: 6,
-                cleanSheets: 1
+                goalsFor: null,
+                goalsAgainst: null,
+                goalDifference: null,
+                cleanSheets: null
             },
 
             squad: [
                 {
-                    number: 1,
+                    number: null,
                     name: "Різник Дмитро",
                     position: "GK",
                     stats: null
                 },
                 {
-                    number: 34,
-                    name: "Баглай Ростислав",
-                    position: "GK",
-                    stats: null
-                },
-                {
-                    number: 22,
-                    name: "Матвієнко Микола",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 5,
-                    name: "Бондар Валерій",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 16,
+                    number: null,
                     name: "Азаров Іраклі",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 13,
+                    number: null,
+                    name: "Бондар Валерій",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Матвієнко Микола",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
                     name: "Педро Енріке",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 21,
+                    number: null,
                     name: "Бондаренко Артем",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 6,
-                    name: "Степаненко Тарас",
-                    position: "MF",
-                    stats: null
-                },
-                {
-                    number: 8,
+                    number: null,
                     name: "Судаков Георгій",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 10,
-                    name: "Кевін",
+                    number: null,
+                    name: "Марлон Гомес",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 11,
+                    number: null,
                     name: "Егіналдо",
                     position: "FW",
                     stats: null
                 },
                 {
-                    number: 14,
-                    name: "Сікан Данило",
+                    number: null,
+                    name: "Невертон",
                     position: "FW",
                     stats: null
                 },
                 {
-                    number: 9,
-                    name: "Траоре Лассіна",
+                    number: null,
+                    name: "Лассіна Траоре",
                     position: "FW",
-                    stats: null
-                },
-                {
-                    number: 20,
-                    name: "Глущенко Антон",
-                    position: "MF",
                     stats: null
                 }
             ],
@@ -263,6 +227,7 @@ export const ukraineData = {
             id: "polissya",
             name: "Полісся",
             city: "Житомир",
+
             position: 3,
             points: 6,
 
@@ -282,55 +247,13 @@ export const ukraineData = {
                 wins: 2,
                 draws: 0,
                 losses: 0,
-                goalsFor: 5,
-                goalsAgainst: 2,
-                goalDifference: 3,
-                cleanSheets: 0
+                goalsFor: null,
+                goalsAgainst: null,
+                goalDifference: null,
+                cleanSheets: null
             },
 
             squad: [
-                {
-                    number: 1,
-                    name: "Бойко Євген",
-                    position: "GK",
-                    stats: null
-                },
-                {
-                    number: 13,
-                    name: "Волинець Євген",
-                    position: "GK",
-                    stats: null
-                },
-                {
-                    number: 2,
-                    name: "Хадрой Анді",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 44,
-                    name: "Чоботенко Сергій",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 5,
-                    name: "Кравець Василь",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 4,
-                    name: "Крушинський Богдан",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 19,
-                    name: "Шепелєв Володимир",
-                    position: "MF",
-                    stats: null
-                },
                 {
                     number: 6,
                     name: "Томандзото Борел Беліада",
@@ -339,37 +262,55 @@ export const ukraineData = {
                 },
                 {
                     number: 10,
-                    name: "Андрієвський Олександр",
+                    name: "Велетень Владислав",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 45,
-                    name: "Брагару Максим",
+                    number: 27,
+                    name: "Федор Олег",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 84,
-                    name: "Черчукан Святослав",
-                    position: "MF",
-                    stats: null
-                },
-                {
-                    number: 7,
-                    name: "Гуцуляк Олексій",
+                    number: 89,
+                    name: "Гайдучик Микола",
                     position: "FW",
                     stats: null
                 },
                 {
-                    number: 9,
-                    name: "Будківський Пилип",
+                    number: null,
+                    name: "Майсурадзе Георгі",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Матіців Жан",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Олівейра Да Сілва Аліссон",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Романюк Богдан",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Абдулхакам Абдулкадір Мухаммад",
                     position: "FW",
                     stats: null
                 },
                 {
-                    number: 11,
-                    name: "Криськів Дмитро",
+                    number: null,
+                    name: "Латута Михаіл",
                     position: "MF",
                     stats: null
                 }
@@ -379,14 +320,121 @@ export const ukraineData = {
         },
 
         // =====================================================
-        // 4. ЕПІЦЕНТР
+        // 4. ДИНАМО
+        // =====================================================
+
+        {
+            id: "dynamo",
+            name: "Динамо",
+            city: "Київ",
+
+            position: 4,
+            points: 6,
+
+            president: "Суркіс Ігор Михайлович",
+
+            coach: {
+                headCoach: "Костюк Ігор Володимирович",
+                assistants: []
+            },
+
+            staff: [],
+
+            formation: "4-2-3-1",
+
+            stats: {
+                played: 2,
+                wins: 2,
+                draws: 0,
+                losses: 0,
+                goalsFor: null,
+                goalsAgainst: null,
+                goalDifference: null,
+                cleanSheets: null
+            },
+
+            squad: [
+                {
+                    number: null,
+                    name: "Суркіс Вячеслав",
+                    position: "GK",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Тимчик Олександр",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Біловар Крістіан",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Вівчаренко Костянтин",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Бражко Володимир",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Шапаренко Микола",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Буяльський Віталій",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Рубчинський Валентин",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Волошин Назар",
+                    position: "FW",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Ярмоленко Андрій",
+                    position: "FW",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Пономаренко Матвій",
+                    position: "FW",
+                    stats: null
+                }
+            ],
+
+            matches: []
+        }
+
+                // =====================================================
+        // 5. ЕПІЦЕНТР
         // =====================================================
 
         {
             id: "epitsentr",
             name: "Епіцентр",
             city: "Кам'янець-Подільський",
-            position: 4,
+
+            position: 5,
             points: 4,
 
             president: null,
@@ -405,100 +453,94 @@ export const ukraineData = {
                 wins: 1,
                 draws: 1,
                 losses: 1,
-                goalsFor: 3,
-                goalsAgainst: 2,
-                goalDifference: 1,
-                cleanSheets: 2
+                goalsFor: null,
+                goalsAgainst: null,
+                goalDifference: null,
+                cleanSheets: null
             },
 
             squad: [
                 {
-                    number: 31,
+                    number: null,
                     name: "Білик Олег",
                     position: "GK",
                     stats: null
                 },
                 {
-                    number: 37,
+                    number: null,
                     name: "Вавшко Арсеній",
                     position: "GK",
                     stats: null
                 },
                 {
-                    number: 71,
+                    number: null,
                     name: "Федотов Нікіта",
                     position: "GK",
                     stats: null
                 },
                 {
-                    number: 3,
-                    name: "Григоращук Степан",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 70,
+                    number: null,
                     name: "Кирюханцев Ігор",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 97,
+                    number: null,
                     name: "Климець Олександр",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 4,
-                    name: "Мороз Владислав",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 13,
+                    number: null,
                     name: "Репай Серьян",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 5,
+                    number: null,
+                    name: "Мороз Владислав",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
                     name: "Запорожець Євген",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 6,
+                    number: null,
                     name: "Ковалець Кирило",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 67,
+                    number: null,
                     name: "Лучкевич Валерій",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 22,
+                    number: null,
                     name: "Кристін Владислав",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 15,
+                    number: null,
                     name: "Голуб Денис",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 9,
-                    name: "Сіфуентес Хоакін Карлос",
-                    position: "MF",
+                    number: null,
+                    name: "Сидун Вадим",
+                    position: "FW",
                     stats: null
                 },
                 {
-                    number: 20,
-                    name: "Сидун Вадим",
+                    number: null,
+                    name: "Сіфуентес Хоакін",
                     position: "FW",
                     stats: null
                 }
@@ -508,24 +550,140 @@ export const ukraineData = {
         },
 
         // =====================================================
-        // 5. ДИНАМО
+        // 6. КРИВБАС
         // =====================================================
 
         {
-            id: "dynamo",
-            name: "Динамо",
-            city: "Київ",
-            position: 5,
-            points: 3,
+            id: "kryvbas",
+            name: "Кривбас",
+            city: "Кривий Ріг",
 
-            president: "Суркіс Ігор Михайлович",
+            position: 6,
+            points: 4,
+
+            president: "Караманіц Костянтин Федорович",
 
             coach: {
-                headCoach: "Костюк Ігор Володимирович",
-                assistants: [
-                    "Гусєв Олег",
-                    "Федоров Сергій"
-                ]
+                headCoach: "ван Леувен Патрік",
+                assistants: []
+            },
+
+            staff: [],
+
+            formation: "4-3-3",
+
+            stats: {
+                played: 3,
+                wins: 1,
+                draws: 1,
+                losses: 1,
+                goalsFor: null,
+                goalsAgainst: null,
+                goalDifference: null,
+                cleanSheets: null
+            },
+
+            squad: [
+                {
+                    number: null,
+                    name: "Кемкін Олександр",
+                    position: "GK",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Хома Богдан",
+                    position: "GK",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Вілівальд Володимир",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Юрчец Ян",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Мпанзу Джиммі",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Боржес Тьяго",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Бекавац Анте",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Шевченко Ярослав",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Герберт Джовані",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Сек Ассан",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Наві Аарон Рой",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Сатчвелл Шакеон",
+                    position: "FW",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Вільямс Міракл",
+                    position: "FW",
+                    stats: null
+                }
+            ],
+
+            matches: []
+        },
+
+        // =====================================================
+        // 7. ЛНЗ
+        // =====================================================
+
+        {
+            id: "lnz",
+            name: "ЛНЗ",
+            city: "Черкаси",
+
+            position: 7,
+            points: 4,
+
+            president: null,
+
+            coach: {
+                headCoach: "Дулуб Олег Анатолійович",
+                assistants: []
             },
 
             staff: [],
@@ -533,105 +691,93 @@ export const ukraineData = {
             formation: "4-2-3-1",
 
             stats: {
-                played: 1,
+                played: 3,
                 wins: 1,
-                draws: 0,
-                losses: 0,
-                goalsFor: 2,
-                goalsAgainst: 1,
-                goalDifference: 1,
-                cleanSheets: 0
+                draws: 1,
+                losses: 1,
+                goalsFor: null,
+                goalsAgainst: null,
+                goalDifference: null,
+                cleanSheets: null
             },
 
             squad: [
                 {
-                    number: 71,
-                    name: "Суркіс Вячеслав",
+                    number: null,
+                    name: "Пеньков Євген",
                     position: "GK",
                     stats: null
                 },
                 {
-                    number: 33,
-                    name: "Манько Борис",
+                    number: null,
+                    name: "Механів Богдан",
                     position: "GK",
                     stats: null
                 },
                 {
-                    number: 40,
-                    name: "Біловар Крістіан",
+                    number: null,
+                    name: "Муравський Євген",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 2,
-                    name: "Вівчаренко Костянтин",
+                    number: null,
+                    name: "Кузик Орест",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 18,
-                    name: "Тимчик Олександр",
+                    number: null,
+                    name: "Момо Мохамед",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 5,
-                    name: "Сич Олексій",
+                    number: null,
+                    name: "Драмбаєв Олексій",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 6,
-                    name: "Бражко Володимир",
+                    number: null,
+                    name: "Салюк Володимир",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Рибалка Сергій",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 29,
-                    name: "Буяльський Віталій",
+                    number: null,
+                    name: "Наумець Владислав",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 10,
-                    name: "Шапаренко Микола",
+                    number: null,
+                    name: "Топалов Максим",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 15,
-                    name: "Рубчинський Валентин",
+                    number: null,
+                    name: "Ноніашвілі Лука",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 9,
-                    name: "Волошин Назар",
-                    position: "MF",
-                    stats: null
-                },
-                {
-                    number: 7,
-                    name: "Ярмоленко Андрій",
-                    position: "MF",
-                    stats: null
-                },
-                {
-                    number: 87,
-                    name: "Герич Владислав",
+                    number: null,
+                    name: "Вакула Владислав",
                     position: "FW",
                     stats: null
                 },
                 {
-                    number: 11,
-                    name: "Пономаренко Матвій",
+                    number: null,
+                    name: "Момо Тараік",
                     position: "FW",
-                    stats: null
-                },
-                {
-                    number: 66,
-                    name: "Тіаре Аліу",
-                    position: "DF",
                     stats: null
                 }
             ],
@@ -640,20 +786,21 @@ export const ukraineData = {
         },
 
         // =====================================================
-        // 6. ЗОРЯ
+        // 8. ЗОРЯ
         // =====================================================
 
         {
             id: "zorya",
             name: "Зоря",
             city: "Луганськ",
-            position: 6,
+
+            position: 8,
             points: 3,
 
             president: "Гєллєр Євген Борисович",
 
             coach: {
-                headCoach: "Скрипник Віктор Анатолійович",
+                headCoach: "Ван Леувен Патрік",
                 assistants: []
             },
 
@@ -666,60 +813,86 @@ export const ukraineData = {
                 wins: 1,
                 draws: 0,
                 losses: 1,
-                goalsFor: 3,
-                goalsAgainst: 3,
-                goalDifference: 0,
-                cleanSheets: 1
+                goalsFor: null,
+                goalsAgainst: null,
+                goalDifference: null,
+                cleanSheets: null
             },
 
             squad: [
                 {
-                    number: 25,
-                    name: "Рибак Владислав",
-                    position: "GK",
-                    stats: null
-                },
-                {
-                    number: 1,
+                    number: null,
                     name: "Сапутін Олександр",
                     position: "GK",
                     stats: null
                 },
                 {
-                    number: 44,
-                    name: "Пердута Ігор",
+                    number: null,
+                    name: "Рибак Владислав",
+                    position: "GK",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Джордан",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 55,
-                    name: "Джордан Андерсон",
+                    number: null,
+                    name: "Боль Арсеній",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 3,
-                    name: "Кравець Василь",
-                    position: "DF",
-                    stats: null
-                },
-                {
-                    number: 5,
+                    number: null,
                     name: "Яніч Андрія",
                     position: "DF",
                     stats: null
                 },
                 {
-                    number: 77,
+                    number: null,
+                    name: "Пердута Ігор",
+                    position: "DF",
+                    stats: null
+                },
+                {
+                    number: null,
                     name: "Кушніренко Богдан",
                     position: "MF",
                     stats: null
                 },
                 {
-                    number: 6,
-                    name: "Попара Деян",
+                    number: null,
+                    name: "Башич Яков",
                     position: "MF",
                     stats: null
                 },
                 {
-               
+                    number: null,
+                    name: "Андушич Неманья",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Нестеренко Іван",
+                    position: "MF",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Слесар Артем",
+                    position: "FW",
+                    stats: null
+                },
+                {
+                    number: null,
+                    name: "Будківський Пилип",
+                    position: "FW",
+                    stats: null
+                }
+            ],
+
+            matches: []
+        },
