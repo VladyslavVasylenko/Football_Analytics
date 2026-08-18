@@ -896,3 +896,4 @@ window.ukraineData = {
 
             matches: []
         },
+};
