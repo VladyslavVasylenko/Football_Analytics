@@ -335,48 +335,66 @@
     // LOAD DATA
     // ---------------------------------------------------------
 
-    async function loadUkraineData() {
-        try {
-            /*
-             * Важливо:
-             * HTML користувача має:
-             *
-             * <script src="js/app.js" defer></script>
-             *
-             * Тому static import тут використовувати не можна.
-             * Dynamic import працює навіть у звичайному JS-файлі.
-             */
-            const module = await import("./ukraine.js");
+    function loadUkraineData() {
 
-            if (!module || !module.ukraineData) {
-                throw new Error(
-                    "ukraineData не знайдено в ukraine.js"
-                );
-            }
+    const script = document.createElement("script");
 
-            ukraineData = module.ukraineData;
+    script.src = "./ukraine.js";
 
-            clubs = Array.isArray(ukraineData.clubs)
-                ? ukraineData.clubs
-                : [];
+    script.onload = function () {
 
-            if (!clubs.length) {
-                throw new Error(
-                    "Масив ukraineData.clubs порожній."
-                );
-            }
+        console.log("ukraine.js успішно завантажено");
 
-            initializeApp();
-        } catch (error) {
-            console.error(
-                "Помилка завантаження ukraine.js:",
-                error
-            );
+        if (
+            !window.ukraineData ||
+            !Array.isArray(window.ukraineData.clubs)
+        ) {
 
             showFatalError(
-                "Не вдалося завантажити ukraine.js. Перевір, що файл знаходиться в папці js поруч із app.js."
+                "ukraine.js завантажився, але структура ukraineData неправильна."
             );
+
+            console.error(
+                "Очікується: window.ukraineData.clubs"
+            );
+
+            return;
         }
+
+        ukraineData = window.ukraineData;
+
+        clubs = ukraineData.clubs;
+
+        if (!clubs.length) {
+
+            showFatalError(
+                "Масив ukraineData.clubs порожній."
+            );
+
+            return;
+        }
+
+        console.log(
+            "Завантажено клубів:",
+            clubs.length
+        );
+
+        initializeApp();
+    };
+
+    script.onerror = function (error) {
+
+        console.error(
+            "Помилка завантаження ukraine.js:",
+            error
+        );
+
+        showFatalError(
+            "Не вдалося завантажити ukraine.js. Перевір, що він знаходиться в папці js поруч із app.js."
+        );
+    };
+
+    document.head.appendChild(script);
     }
 
     // ---------------------------------------------------------
