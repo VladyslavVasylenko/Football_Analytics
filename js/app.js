@@ -335,68 +335,53 @@
     // LOAD DATA
     // ---------------------------------------------------------
 
-    function loadUkraineData() {
+   function loadUkraineData() {
 
-    const script = document.createElement("script");
+    console.log("Перевіряю ukraineData...");
 
-    script.src = "./ukraine.js";
-
-    script.onload = function () {
-
-        console.log("ukraine.js успішно завантажено");
-
-        if (
-            !window.ukraineData ||
-            !Array.isArray(window.ukraineData.clubs)
-        ) {
-
-            showFatalError(
-                "ukraine.js завантажився, але структура ukraineData неправильна."
-            );
-
-            console.error(
-                "Очікується: window.ukraineData.clubs"
-            );
-
-            return;
-        }
-
-        ukraineData = window.ukraineData;
-
-        clubs = ukraineData.clubs;
-
-        if (!clubs.length) {
-
-            showFatalError(
-                "Масив ukraineData.clubs порожній."
-            );
-
-            return;
-        }
-
-        console.log(
-            "Завантажено клубів:",
-            clubs.length
-        );
-
-        initializeApp();
-    };
-
-    script.onerror = function (error) {
+    if (
+        !window.ukraineData ||
+        !Array.isArray(window.ukraineData.clubs)
+    ) {
 
         console.error(
-            "Помилка завантаження ukraine.js:",
-            error
+            "ukraineData НЕ знайдено або clubs не є масивом.",
+            window.ukraineData
         );
 
         showFatalError(
-            "Не вдалося завантажити ukraine.js. Перевір, що він знаходиться в папці js поруч із app.js."
+            "ukraine.js не завантажив дані. Перевір структуру файлів та синтаксис ukraine.js."
         );
-    };
 
-    document.head.appendChild(script);
+        return;
     }
 
+    console.log(
+        "ukraineData знайдено!",
+        window.ukraineData
+    );
+
+    ukraineData = window.ukraineData;
+
+    clubs = ukraineData.clubs;
+
+    console.log(
+        "Кількість клубів:",
+        clubs.length
+    );
+
+    if (clubs.length === 0) {
+
+        showFatalError(
+            "ukraineData.clubs порожній."
+        );
+
+        return;
+    }
+
+    initializeApp();
+}
+                
     // ---------------------------------------------------------
     // INITIALIZATION
     // ---------------------------------------------------------
